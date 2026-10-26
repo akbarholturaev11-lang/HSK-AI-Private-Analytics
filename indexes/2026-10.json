@@ -1,0 +1,58 @@
+{
+  "dataset": "hskai_private_analytics_month_index",
+  "month_utc": "2026-10",
+  "schema_version": 1,
+  "snapshot_count": 5,
+  "snapshots": [
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "users/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "users",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "sales/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "sales",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "payments/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "payments",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "overview/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "overview",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "courses/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "courses",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    }
+  ]
+}

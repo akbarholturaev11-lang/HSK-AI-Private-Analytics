@@ -1,0 +1,133 @@
+{
+  "dataset": "hskai_private_analytics_index",
+  "months": [
+    {
+      "index": "indexes/2026-10.json",
+      "month_utc": "2026-10",
+      "snapshots": 5
+    }
+  ],
+  "notes": [
+    "The date in a filename is the UTC observation/generation date, not a single-day reporting window.",
+    "Weekly and monthly figures are rolling windows and MUST NOT be added across snapshots.",
+    "Only validated source measurements are published; missing months, days or marketing metrics cannot be inferred.",
+    "Archived observations remain after the 24-hour R2 expiry, but historical values must not be presented as live.",
+    "Current paid Pro stock and period-specific payment flows use different denominators."
+  ],
+  "recent_snapshots": [
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "users/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "users",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "sales/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "sales",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "payments/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "payments",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "overview/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "overview",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-27T01:01:59.760210+00:00",
+      "generated_at": "2026-10-26T01:01:59.760210+00:00",
+      "observation_date_utc": "2026-10-26",
+      "path": "courses/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "period": "weekly",
+      "section": "courses",
+      "since": "2026-10-19T01:01:59.760210+00:00",
+      "window": "rolling_7_days"
+    }
+  ],
+  "schema_version": 1,
+  "sections": {
+    "courses": {
+      "historical_snapshots": 1,
+      "latest": "courses/latest.json",
+      "most_recent_history": "courses/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "oldest_history": "courses/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "periods": {
+        "weekly": "courses/periods/weekly.json"
+      },
+      "status": "fresh"
+    },
+    "marketing": {
+      "historical_snapshots": 0,
+      "latest": null,
+      "most_recent_history": null,
+      "oldest_history": null,
+      "periods": {},
+      "status": "not_instrumented"
+    },
+    "overview": {
+      "historical_snapshots": 1,
+      "latest": "overview/latest.json",
+      "most_recent_history": "overview/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "oldest_history": "overview/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "periods": {
+        "weekly": "overview/periods/weekly.json"
+      },
+      "status": "fresh"
+    },
+    "payments": {
+      "historical_snapshots": 1,
+      "latest": "payments/latest.json",
+      "most_recent_history": "payments/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "oldest_history": "payments/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "periods": {
+        "weekly": "payments/periods/weekly.json"
+      },
+      "status": "fresh"
+    },
+    "sales": {
+      "historical_snapshots": 1,
+      "latest": "sales/latest.json",
+      "most_recent_history": "sales/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "oldest_history": "sales/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "periods": {
+        "weekly": "sales/periods/weekly.json"
+      },
+      "status": "fresh"
+    },
+    "users": {
+      "historical_snapshots": 1,
+      "latest": "users/latest.json",
+      "most_recent_history": "users/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "oldest_history": "users/history/2026/10/2026-10-26T010159760210Z_weekly.json",
+      "periods": {
+        "weekly": "users/periods/weekly.json"
+      },
+      "status": "fresh"
+    }
+  },
+  "source": "validated Admin PWA overview R2 cache",
+  "status": "fresh",
+  "total_historical_snapshots": 5
+}
