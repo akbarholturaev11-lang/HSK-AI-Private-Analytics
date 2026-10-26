@@ -1,0 +1,50 @@
+name: Private R2 statistics sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 1,7,13,19 * * *' # Every six hours UTC; no database refresh
+
+permissions:
+  contents: write
+
+concurrency:
+  group: private-r2-statistics-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pinned R2 S3 client
+        run: python -m pip install --disable-pip-version-check 'boto3==1.40.70'
+      - name: Run privacy and freshness tests
+        run: python -m unittest discover -s tests -v
+      - name: Sync verified basic aggregate snapshots
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: hsk-ai-statistics
+          R2_BASIC_STATS_NAMESPACE: 35d5cfd5119c9b4cfd319d25
+        run: python scripts/sync_from_r2.py
+      - name: Commit sanitized files only when changed
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add -- data/
+          if git diff --cached --quiet; then
+            echo 'No new or changed statistics snapshots'
+          else
+            git -c user.name='github-actions[bot]' \
+                -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+                commit -m 'data: sync validated private R2 aggregate statistics [skip ci]'
+            git push
+          fi
