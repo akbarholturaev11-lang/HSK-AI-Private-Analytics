@@ -1,41 +1,78 @@
-# HSK AI — Private Analytics Bridge
+# HSK AI — Private Analytics
 
-A **private** GitHub mirror of allowlisted aggregate statistics from HSK AI Admin PWA's Cloudflare R2 cache. ChatGPT Plus can read the sanitized files using the GitHub connector.
+This **private** repository provides ChatGPT Plus with verified, privacy-filtered
+statistics from HSK AI Admin PWA's Cloudflare R2 aggregate cache.
 
-## Current verified behavior
+## Organized analytics
 
-- Source: Admin PWA **overview** aggregate, not raw user records or SQL.
-- Bucket: `hsk-ai-statistics`; pinned namespace: `aaa307fc4e280589c3d89a8d`.
-- Output: `data/latest.json`, `data/overview_weekly.json`, `data/summary.md`, and `data/status.json`; monthly/all-time files are added only when their snapshots exist and validate.
-- **16 strictly allowlisted counts** (accounts, activity, Pro, payment records, course engagement).
-- Snapshot freshness: 24 hours after its actual `generated_at`. If expired or absent, the workflow removes `latest.json` rather than displaying stale data as fresh.
-- GitHub Action: every six hours UTC or manual run, with privacy/freshness unit tests. No new SQL is triggered by the workflow.
-- Scope: current aggregates only; financial revenue, conversion rates, detailed experiment analytics and AI cost are **not** exported in this first version.
+Data is grouped by **section**, **reporting window**, and **UTC observation timestamp**:
 
-## Reading in ChatGPT
+```text
+index.json                         ← global navigation and source/availability flags
+indexes/2026-10.json               ← all recorded October 2026 snapshots
+overview/latest.json               ← latest *fresh weekly* overview, if available
+overview/periods/weekly.json       ← most recent *fresh* weekly overview
+overview/history/2026/10/
+  2026-10-26T010159760210Z_weekly.json
+users/latest.json
+users/history/2026/10/...
+sales/latest.json
+sales/history/2026/10/...
+payments/latest.json
+payments/history/2026/10/...
+courses/latest.json
+courses/history/2026/10/...
+marketing/README.md                ← no verified marketing data yet
+data/latest.json                   ← backward-compatible legacy weekly overview
+data/status.json                   ← R2 source freshness state
+```
 
-Allow access to this private repo using the GitHub connector. Request:
+**Crucial interpretation:** the date in the historical file name is when the
+aggregate was **generated**, NOT a one-day total. Weekly reports use the previous
+rolling seven days; monthly reports use the previous 30 days. All-time snapshots
+may contain some current/rolling-window measures. Do **not** add overlapping
+windows, claim that historical values are live or invent gaps in the calendar.
 
-> Read `data/status.json` and `data/latest.json` in `akbarholturaev11-lang/HSK-AI-Private-Analytics`. Check `generated_at` and `expires_at`, then analyze the reported counts without inventing missing statistics.
+Available categories are **overview**, **users**, **sales**, **payments**, and
+**courses**. All category metrics derive strictly from the approved 16 counters
+of the Admin PWA overview projection. "Sales" provides current paid Pro and
+period-scoped paying-account counts, not monetary revenue or a conversion rate.
+"Payments" provides payment-record counts, not distinct buyers. Marketing does
+not have an approved source yet and is **not_instrumented** in `index.json`.
 
-## Secrets
+The root index links monthly index files; each monthly index lists complete
+history file paths and their period start/end evidence. Historical files are
+immutable: identical snapshots are reused; conflicting values at the same
+timestamp fail the run. The `latest.json` aliases disappear on expiration,
+while historical observations remain for longitudinal analysis.
 
-GitHub → Settings → Secrets and variables → Actions → Repository secrets:
+## Reading data from ChatGPT Plus
 
-- `R2_ACCOUNT_ID`
-- `R2_ACCESS_KEY_ID`
-- `R2_SECRET_ACCESS_KEY`
+Give the GitHub connector permission to access this private repo. For example:
 
-Recommended: use a **read-only** Cloudflare R2 token scoped to the bucket. Never commit credentials or raw snapshots. GitHub Actions gets repository write access only for the sanitized output.
+> Open `index.json` in `akbarholturaev11-lang/HSK-AI-Private-Analytics`.
+> For October, open `indexes/2026-10.json` and the relevant category snapshots.
+> Compare only compatible metrics and reporting windows, distinguish historical
+> observations from live data, and identify missing days rather than filling them in.
 
-## Important limitation
+## Synchronization and credentials
 
-HSK AI's original Redis/R2 aggregate cache is demand-driven. GitHub's six-hour poll **does not refresh the source statistics**. To update a snapshot, visit the corresponding protected Admin PWA Overview after its 24-hour TTL expires, or implement a separately reviewed server-side aggregate refresh. Always check `data/status.json` first.
+- Source bucket: `hsk-ai-statistics`.
+- Pinned, verified overview cache namespace in `.github/workflows/sync-r2.yml`.
+- GitHub Actions runs every six hours UTC, or manually. This **does not** cause
+  a new database aggregate to be computed. The Admin PWA R2 cache is demand-driven.
+- Private repository Actions secrets: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
+  `R2_SECRET_ACCESS_KEY`.
+- Prefer a **read-only** R2 key scoped to this one bucket. Never commit credentials
+  or raw R2 snapshots.
+- Run tests: `python -m unittest discover -s tests -v`.
 
-## Tests
+## Limits
 
-`python -m unittest discover -s tests -v`
-
-## Security
-
-This repository must remain **PRIVATE**. No identifiers, messages, receipts, arbitrary R2 objects, access tokens, or user-level rows are exported. The bridge is read-only with respect to Cloudflare R2 and is not an MCP connector.
+- The initial archive can only contain snapshots observed after archive
+  activation; past unsaved dates cannot be reconstructed from present data.
+- No person-level identifiers, feedback text, receipts, user rows, tokens,
+  unverified attribution, marketing or revenue metrics are exported.
+- Archives persist, so repository size will increase over time; review the
+  retention/indexing design before it grows to tens of thousands of files.
+- R2 or credential failures stop the workflow without publishing fabricated data.
