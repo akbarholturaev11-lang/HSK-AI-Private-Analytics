@@ -46,8 +46,12 @@ def main():
                     label="unavailable"
                 elif data.get("source")==SOURCE and data.get("platform")=="overall" and data.get("period")=="weekly":
                     label="basic_statistics"
+                elif data.get("source")=="users + payments + canonical learning events":
+                    section=(data.get("scope") or {}).get("section") if isinstance(data.get("scope"),dict) else None
+                    label="admin_"+section if section in ("home","overview") else "admin_unknown_section"
                 elif data.get("source")=="first-party stored aggregate projections":
-                    label="analytics_section"
+                    section=(data.get("scope") or {}).get("section") if isinstance(data.get("scope"),dict) else None
+                    label="analytics_"+section if section in ("course","platform","funnel","money","sources","report","experiments") else "analytics_section"
                 else:
                     label="other_source"
                 print("R2 namespace "+namespace+" classification="+label)
