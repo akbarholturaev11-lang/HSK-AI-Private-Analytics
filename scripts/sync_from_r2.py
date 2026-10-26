@@ -217,8 +217,10 @@ def sync(client, bucket, namespace, base, now):
             continue
         try:
             valid[period] = sanitize(raw, period, now)
-        except InvalidSnapshot:
+        except InvalidSnapshot as exc:
             validation_errors.append(period)
+            # All InvalidSnapshot messages are static developer-authored reasons, not payload values.
+            print(f"Rejected R2 {period} snapshot: {exc}", file=sys.stderr)
     out = base / "data"
     out.mkdir(parents=True, exist_ok=True)
     for period in PERIODS:
