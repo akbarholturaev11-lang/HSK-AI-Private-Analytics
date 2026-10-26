@@ -1,10 +1,12 @@
 {
-  "schema_version": 1,
   "dataset": "hskai_statistics",
-  "status": "not_configured",
-  "valid_periods": [],
-  "generation_times": {},
   "expires_at": {},
-  "invalid_periods": [],
-  "note": "Initial setup; no R2 sync has run. Do not infer any current statistics."
+  "generation_times": {},
+  "invalid_periods": [
+    "weekly"
+  ],
+  "note": "R2 cache updates on first-party Admin PWA demand, not on GitHub schedule.",
+  "schema_version": 1,
+  "status": "unavailable",
+  "valid_periods": []
 }
