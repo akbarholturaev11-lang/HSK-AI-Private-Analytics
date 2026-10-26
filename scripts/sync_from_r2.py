@@ -248,10 +248,167 @@ def sync(client, bucket, namespace, base, now):
     return status
 
 
+
+OVERVIEW_SOURCE = "users + payments + canonical learning events"
+OVERVIEW_PATHS = {
+    "users_total": ("users_total",),
+    "new_accounts": ("new_accounts",),
+    "active_accounts": ("active_accounts",),
+    "active_today": ("active_today",),
+    "active_pro": ("active_pro",),
+    "expiring_pro": ("expiring_pro",),
+    "bot_blocked": ("bot_blocked",),
+    "blocked_current": ("blocked_current",),
+    "pending_current": ("pending_current",),
+    "paying_accounts": ("paying_accounts",),
+    "payments_pending": ("payments_by_status", "pending"),
+    "payments_approved": ("payments_by_status", "approved"),
+    "payments_rejected": ("payments_by_status", "rejected"),
+    "course_engaged_accounts": ("course_engagement", "engaged_accounts"),
+    "course_started_accounts": ("course_engagement", "started_accounts"),
+    "course_completed_accounts": ("course_engagement", "completed_accounts"),
+}
+
+
+def sanitize_overview(raw, period, now):
+    """Only expose predetermined scalar overview aggregates from the verified cache."""
+    if period not in PERIODS or now.tzinfo is None:
+        raise InvalidSnapshot("invalid overview request")
+    payload = _parse(raw)
+    if not isinstance(payload, dict) or set(payload) != {"version", "expires_at", "data"}:
+        raise InvalidSnapshot("invalid overview envelope")
+    if type(payload["version"]) is not int or payload["version"] != 1:
+        raise InvalidSnapshot("invalid overview envelope version")
+    data = payload["data"]
+    if not isinstance(data, dict) or data.get("platform") != "overall" or data.get("period") != period:
+        raise InvalidSnapshot("unexpected overview platform or period")
+    if data.get("source") != OVERVIEW_SOURCE or data.get("available") is not True:
+        raise InvalidSnapshot("invalid overview source or availability")
+    scope = data.get("scope")
+    if not isinstance(scope, dict) or scope.get("section") != "overview":
+        raise InvalidSnapshot("unexpected overview scope")
+    gen = _datetime(data.get("generated_at"))
+    exp_epoch = payload["expires_at"]
+    if type(exp_epoch) not in (int, float) or not math.isfinite(exp_epoch):
+        raise InvalidSnapshot("invalid overview expiry")
+    try:
+        expiry = datetime.fromtimestamp(exp_epoch, tz=timezone.utc)
+    except (OverflowError, ValueError):
+        raise InvalidSnapshot("invalid overview expiry")
+    now = now.astimezone(timezone.utc)
+    if abs((expiry - gen - timedelta(days=1)).total_seconds()) > 1 or not now < expiry <= now + timedelta(days=1):
+        raise InvalidSnapshot("expired, early or inconsistent overview expiry")
+    if gen > now + timedelta(minutes=2):
+        raise InvalidSnapshot("future overview generated time")
+    if period == "all_time":
+        if data.get("since") is not None:
+            raise InvalidSnapshot("invalid all-time overview")
+        since = None
+    else:
+        since = _datetime(data.get("since"))
+        if abs((gen - since - timedelta(days=7 if period == "weekly" else 30)).total_seconds()) > 1:
+            raise InvalidSnapshot("invalid overview date window")
+    source_metrics = data.get("metrics")
+    if not isinstance(source_metrics, dict):
+        raise InvalidSnapshot("invalid overview metrics")
+    metrics = {name: _count(_get(source_metrics, path)) for name, path in OVERVIEW_PATHS.items()}
+    return {
+        "schema_version": 1,
+        "dataset": "hskai_admin_overview",
+        "platform": "overall",
+        "period": period,
+        "generated_at": gen.isoformat(),
+        "expires_at": expiry.isoformat(),
+        "since": since.isoformat() if since else None,
+        "available": True,
+        "timezone": "UTC",
+        "source": "HSK AI Admin PWA overview aggregate projection",
+        "scope": {
+            "section": "overview",
+            "active_accounts": "selected period; all_time uses rolling 30 days",
+            "payments": "records by current status in selected period, not distinct payers",
+            "paying_accounts": "distinct paying accounts in selected period",
+            "active_pro": "current paid entitlements",
+            "conversion": "not measured by this overview snapshot",
+        },
+        "metrics": metrics,
+    }
+
+
+def summarize_overview(data):
+    m = data["metrics"]
+    return (
+        "# HSK AI — latest verified overview (weekly)\n\n"
+        f"Generated (UTC): **{data['generated_at']}**  \n"
+        f"Expires (UTC): **{data['expires_at']}**\n\n"
+        f"- Total accounts: **{m['users_total']}**\n"
+        f"- New registrations (7d): **{m['new_accounts']}**\n"
+        f"- Active accounts (7d): **{m['active_accounts']}**\n"
+        f"- Active today: **{m['active_today']}**\n"
+        f"- Active Pro accounts (current): **{m['active_pro']}**\n"
+        f"- Paying accounts (7d): **{m['paying_accounts']}**\n"
+        f"- Approved payment records (7d): **{m['payments_approved']}**\n"
+        f"- Pending payment records (7d): **{m['payments_pending']}**\n"
+        f"- Course engaged accounts (7d): **{m['course_engaged_accounts']}**\n"
+        f"- Course completed accounts (7d): **{m['course_completed_accounts']}**\n\n"
+        "Only aggregate statistics from Admin PWA. Payment records are not unique buyers. "
+        "Conversion, revenue and AI usage are not in this dataset. "
+        "Cache refreshes on Admin PWA demand, not on GitHub schedule.\n"
+    )
+
+
+def sync_overview(client, bucket, namespace, base, now):
+    """Mirror the authenticated admin overview source, not arbitrary R2 data."""
+    if not re.fullmatch(r"[0-9a-f]{24}", namespace):
+        raise ValueError("Invalid overview namespace")
+    valid = {}
+    rejected = []
+    for period in PERIODS:
+        key = f"{ROOT}/{namespace}/statistics/overall_{period}.json"
+        raw = fetch(client, bucket, key)
+        if raw is None:
+            continue
+        try:
+            valid[period] = sanitize_overview(raw, period, now)
+        except InvalidSnapshot as exc:
+            rejected.append(period)
+            print(f"Rejected R2 overview {period}: {exc}", file=sys.stderr)
+    out = base / "data"
+    out.mkdir(parents=True, exist_ok=True)
+    for period in PERIODS:
+        file = out / f"overview_{period}.json"
+        if period in valid:
+            save_json(file, valid[period])
+        else:
+            file.unlink(missing_ok=True)
+    if "weekly" in valid:
+        save_json(out / "latest.json", valid["weekly"])
+        (out / "summary.md").write_text(summarize_overview(valid["weekly"]), encoding="utf-8")
+    else:
+        (out / "latest.json").unlink(missing_ok=True)
+        (out / "summary.md").unlink(missing_ok=True)
+    status = {
+        "schema_version": 1,
+        "dataset": "hskai_admin_overview",
+        "status": "fresh" if "weekly" in valid else "unavailable",
+        "source_section": "overview",
+        "valid_periods": sorted(valid),
+        "generation_times": {p: valid[p]["generated_at"] for p in valid},
+        "expires_at": {p: valid[p]["expires_at"] for p in valid},
+        "invalid_periods": rejected,
+        "note": "24h R2 cache refreshes only on Admin PWA demand, not GitHub schedule.",
+    }
+    # Purge old basic-statistics files until that source is explicitly configured.
+    for period in PERIODS:
+        (out / f"overall_{period}.json").unlink(missing_ok=True)
+    save_json(out / "status.json", status)
+    return status
+
+
 def main():
     account = os.getenv("R2_ACCOUNT_ID", "")
     bucket = os.getenv("R2_BUCKET", "")
-    namespace = os.getenv("R2_BASIC_STATS_NAMESPACE", "")
+    namespace = os.getenv("R2_OVERVIEW_NAMESPACE", "")
     access = os.getenv("R2_ACCESS_KEY_ID", "")
     secret = os.getenv("R2_SECRET_ACCESS_KEY", "")
     if (not re.fullmatch(r"[0-9a-f]{32}", account)
@@ -270,7 +427,7 @@ def main():
                       retries={"max_attempts": 2}),
     )
     try:
-        status = sync(client, bucket, namespace, Path("."), datetime.now(timezone.utc))
+        status = sync_overview(client, bucket, namespace, Path("."), datetime.now(timezone.utc))
     except Exception as exc:
         # Do not leak request URLs or key names from SDK exceptions.
         response = getattr(exc, "response", None)
