@@ -271,7 +271,20 @@ def main():
         status = sync(client, bucket, namespace, Path("."), datetime.now(timezone.utc))
     except Exception as exc:
         # Do not leak request URLs or key names from SDK exceptions.
-        print("R2 sync unavailable: " + type(exc).__name__, file=sys.stderr)
+        response = getattr(exc, "response", None)
+        if isinstance(response, dict):
+            error = response.get("Error", {})
+            meta = response.get("ResponseMetadata", {})
+            code = error.get("Code", "") if isinstance(error, dict) else ""
+            http = meta.get("HTTPStatusCode") if isinstance(meta, dict) else None
+            if isinstance(code, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,48}", code):
+                print("R2 sync unavailable: S3 error " + code +
+                      (f" (HTTP {http})" if type(http) is int and 100 <= http <= 599 else ""),
+                      file=sys.stderr)
+            else:
+                print("R2 sync unavailable: S3 request rejected", file=sys.stderr)
+        else:
+            print("R2 sync unavailable: " + type(exc).__name__, file=sys.stderr)
         return 1
     print("R2 sync: " + status["status"] + "; valid variants: " + ",".join(status["valid_periods"]))
     return 0
