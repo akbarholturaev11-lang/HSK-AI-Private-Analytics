@@ -1,20 +1,41 @@
 # HSK AI — Private Analytics Bridge
 
-This **private** repository mirrors allowlisted aggregated HSK AI statistics from the private Cloudflare R2 bucket `hsk-ai-statistics` for use with the GitHub connector in ChatGPT Plus.
+A **private** GitHub mirror of allowlisted aggregate statistics from HSK AI Admin PWA's Cloudflare R2 cache. ChatGPT Plus can read the sanitized files using the GitHub connector.
 
-## What it does
-- GitHub Actions checks R2 up to four times daily (this does **not** refresh the database).
-- Reads only the R2 **basic overall statistics** namespace, validates the R2 cache envelope and source, and exports a strictly allowlisted subset.
-- Writes `data/latest.json`, `data/summary.md`, and `data/status.json` if snapshots are fresh. Expired snapshots are never published as fresh.
-- Never exports raw user accounts, identifiers, receipts, feedback, secrets or arbitrary R2 objects.
+## Current verified behavior
 
-## Enable scheduled synchronization
-1. Under this repository's **Settings → Secrets and variables → Actions**, create repository secrets: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`. Use a **read-only Cloudflare R2 token** limited to `hsk-ai-statistics`, not the Railway write token.
-2. The bucket and **24-character basic-statistics namespace** are pinned in the workflow. Verify they match the R2 console.
-3. Open **Actions → Private R2 statistics sync → Run workflow**. Inspect `data/status.json` after completion.
-4. Authorize this private repository in ChatGPT's GitHub connector. Ask ChatGPT to read `data/status.json` and `data/latest.json`, report `generated_at`/`expires_at` and analyze only actual available figures.
+- Source: Admin PWA **overview** aggregate, not raw user records or SQL.
+- Bucket: `hsk-ai-statistics`; pinned namespace: `aaa307fc4e280589c3d89a8d`.
+- Output: `data/latest.json`, `data/overview_weekly.json`, `data/summary.md`, and `data/status.json`; monthly/all-time files are added only when their snapshots exist and validate.
+- **16 strictly allowlisted counts** (accounts, activity, Pro, payment records, course engagement).
+- Snapshot freshness: 24 hours after its actual `generated_at`. If expired or absent, the workflow removes `latest.json` rather than displaying stale data as fresh.
+- GitHub Action: every six hours UTC or manual run, with privacy/freshness unit tests. No new SQL is triggered by the workflow.
+- Scope: current aggregates only; financial revenue, conversion rates, detailed experiment analytics and AI cost are **not** exported in this first version.
 
-## Limits
-The HSK AI R2 cache is **lazy**. GitHub sync reads snapshots already created when the Admin PWA statistics page was queried. It does not compute, refresh or query production data. Monthly/all-time output appears only if those variants have been cached. If all are missing/stale, status will be `unavailable`.
+## Reading in ChatGPT
 
-This repository must remain PRIVATE. Do not copy its data or workflow tokens into public HSK-AI-Bot.
+Allow access to this private repo using the GitHub connector. Request:
+
+> Read `data/status.json` and `data/latest.json` in `akbarholturaev11-lang/HSK-AI-Private-Analytics`. Check `generated_at` and `expires_at`, then analyze the reported counts without inventing missing statistics.
+
+## Secrets
+
+GitHub → Settings → Secrets and variables → Actions → Repository secrets:
+
+- `R2_ACCOUNT_ID`
+- `R2_ACCESS_KEY_ID`
+- `R2_SECRET_ACCESS_KEY`
+
+Recommended: use a **read-only** Cloudflare R2 token scoped to the bucket. Never commit credentials or raw snapshots. GitHub Actions gets repository write access only for the sanitized output.
+
+## Important limitation
+
+HSK AI's original Redis/R2 aggregate cache is demand-driven. GitHub's six-hour poll **does not refresh the source statistics**. To update a snapshot, visit the corresponding protected Admin PWA Overview after its 24-hour TTL expires, or implement a separately reviewed server-side aggregate refresh. Always check `data/status.json` first.
+
+## Tests
+
+`python -m unittest discover -s tests -v`
+
+## Security
+
+This repository must remain **PRIVATE**. No identifiers, messages, receipts, arbitrary R2 objects, access tokens, or user-level rows are exported. The bridge is read-only with respect to Cloudflare R2 and is not an MCP connector.
