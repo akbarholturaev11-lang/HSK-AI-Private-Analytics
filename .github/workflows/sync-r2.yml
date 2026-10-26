@@ -33,21 +33,14 @@ jobs:
         run: python -m pip install --disable-pip-version-check 'boto3==1.40.70'
       - name: Run privacy and freshness tests
         run: python -m unittest discover -s tests -v
-      - name: Identify R2 home and overview namespaces without displaying metrics
-        env:
-          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
-          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          R2_BUCKET: hsk-ai-statistics
-        run: python scripts/probe_r2_namespaces.py
       # Strict aggregate validator logs only static rejection reasons, never R2 object contents.
-      - name: Sync verified basic aggregate snapshots
+      - name: Sync verified Admin PWA overview snapshots
         env:
           R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
           R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
           R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
           R2_BUCKET: hsk-ai-statistics
-          R2_BASIC_STATS_NAMESPACE: 35d5cfd5119c9b4cfd319d25
+          R2_OVERVIEW_NAMESPACE: aaa307fc4e280589c3d89a8d
         run: python scripts/sync_from_r2.py
       - name: Commit sanitized files only when changed
         shell: bash
