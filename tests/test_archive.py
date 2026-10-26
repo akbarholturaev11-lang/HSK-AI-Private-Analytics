@@ -75,7 +75,7 @@ class ArchiveTests(unittest.TestCase):
             self.assertEqual(first, second)
             self.assertEqual(root_data, (root / "index.json").read_bytes())
             self.assertEqual(monthly_data, (root / "indexes/2026-10.json").read_bytes())
-            self.assertEqual(len(list(root.rglob("*_weekly.json"))), 5)
+            self.assertEqual(sum(len(list((root / section / "history").rglob("*_weekly.json"))) for section in SECTION_METRICS), 5)
 
     def test_same_day_different_snapshots_and_periods_do_not_overwrite(self):
         with TemporaryDirectory() as d:
