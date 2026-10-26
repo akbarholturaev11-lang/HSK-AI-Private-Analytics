@@ -25,6 +25,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: main # Always start from current data state, including prior archive commits
           persist-credentials: true
       - uses: actions/setup-python@v5
         with:
@@ -48,6 +49,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          # Refuse to publish a stale checkout when main advanced during this run.
+          git fetch origin main
+          if [ "$(git rev-parse HEAD)" != "$(git rev-parse origin/main)" ]; then
+            echo "Remote main advanced during sync; refusing to replace concurrent changes."
+            exit 1
+          fi
           git add -A -- data/ overview/ users/ sales/ payments/ courses/ indexes/ index.json
           if git diff --cached --quiet; then
             echo 'No new or changed statistics snapshots'
