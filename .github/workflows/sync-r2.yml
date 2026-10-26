@@ -42,11 +42,13 @@ jobs:
           R2_BUCKET: hsk-ai-statistics
           R2_OVERVIEW_NAMESPACE: aaa307fc4e280589c3d89a8d
         run: python scripts/sync_from_r2.py
+      - name: Build immutable date-based archives and indexes
+        run: python -m scripts.build_archive
       - name: Commit sanitized files only when changed
         shell: bash
         run: |
           set -euo pipefail
-          git add -- data/
+          git add -A -- data/ overview/ users/ sales/ payments/ courses/ indexes/ index.json
           if git diff --cached --quiet; then
             echo 'No new or changed statistics snapshots'
           else
