@@ -2,6 +2,12 @@ name: Private R2 statistics sync
 
 on:
   workflow_dispatch:
+  # Also run once when this workflow is edited on main, for initial activation and safe upgrades.
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/sync-r2.yml'
   schedule:
     - cron: '17 1,7,13,19 * * *' # Every six hours UTC; no database refresh
 
