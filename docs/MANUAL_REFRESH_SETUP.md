@@ -45,7 +45,9 @@ current; confirm the subsequent `sync-r2.yml` run is successful, then read
   no database read is performed in the rate-limited case.
 - Other Admin PWA workers may still hold the previous in-process overview cache
   for up to **60 seconds**. Subsequent overview hits revalidate against Redis
-  without triggering a new PostgreSQL query.
+  without triggering a new PostgreSQL query **when Redis remains reachable**.
+  If Redis is unavailable, an existing valid local cache may remain until its
+  original expiry; the refresh operation itself fails closed.
 - R2 and Redis are different storage systems and cannot be committed atomically.
   If R2 succeeds and Redis publication fails, the endpoint reports failure even
   though the new R2 snapshot exists. Inspect R2/GitHub sync status and retry
