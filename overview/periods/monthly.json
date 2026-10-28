@@ -1,0 +1,38 @@
+{
+  "available": true,
+  "dataset": "hskai_admin_overview",
+  "expires_at": "2026-10-29T09:37:24.628373+00:00",
+  "generated_at": "2026-10-28T09:37:24.628373+00:00",
+  "interpretation": {
+    "daily_snapshot": "Observation captured this day; NOT counts for this one day",
+    "measurements": "mixed current-state and selected-period aggregates",
+    "overlapping_windows": "Overlapping 7d/30d snapshots must not be summed",
+    "payments": "record counts and distinct paying accounts are different grains"
+  },
+  "metrics": {
+    "active_accounts": 745,
+    "active_pro": 7,
+    "active_today": 26,
+    "blocked_current": 2,
+    "bot_blocked": 160,
+    "course_completed_accounts": 268,
+    "course_engaged_accounts": 360,
+    "course_started_accounts": 326,
+    "expiring_pro": 0,
+    "new_accounts": 629,
+    "paying_accounts": 10,
+    "payments_approved": 13,
+    "payments_pending": 1,
+    "payments_rejected": 8,
+    "pending_current": 1,
+    "users_total": 2301
+  },
+  "observation_date_utc": "2026-10-28",
+  "period": "monthly",
+  "platform": "overall",
+  "schema_version": 1,
+  "section": "overview",
+  "since": "2026-09-28T09:37:24.628373+00:00",
+  "source": "HSK AI Admin PWA overview aggregate projection",
+  "window": "rolling_30_days"
+}

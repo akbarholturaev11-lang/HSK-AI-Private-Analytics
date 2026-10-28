@@ -2,8 +2,158 @@
   "dataset": "hskai_private_analytics_month_index",
   "month_utc": "2026-10",
   "schema_version": 1,
-  "snapshot_count": 15,
+  "snapshot_count": 30,
   "snapshots": [
+    {
+      "expires_at": "2026-10-29T09:37:24.709874+00:00",
+      "generated_at": "2026-10-28T09:37:24.709874+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "users/history/2026/10/2026-10-28T093724709874Z_all_time.json",
+      "period": "all_time",
+      "section": "users",
+      "since": null,
+      "window": "since_inception_with_some_rolling_current_metrics"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.709874+00:00",
+      "generated_at": "2026-10-28T09:37:24.709874+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "sales/history/2026/10/2026-10-28T093724709874Z_all_time.json",
+      "period": "all_time",
+      "section": "sales",
+      "since": null,
+      "window": "since_inception_with_some_rolling_current_metrics"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.709874+00:00",
+      "generated_at": "2026-10-28T09:37:24.709874+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "payments/history/2026/10/2026-10-28T093724709874Z_all_time.json",
+      "period": "all_time",
+      "section": "payments",
+      "since": null,
+      "window": "since_inception_with_some_rolling_current_metrics"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.709874+00:00",
+      "generated_at": "2026-10-28T09:37:24.709874+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "overview/history/2026/10/2026-10-28T093724709874Z_all_time.json",
+      "period": "all_time",
+      "section": "overview",
+      "since": null,
+      "window": "since_inception_with_some_rolling_current_metrics"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.709874+00:00",
+      "generated_at": "2026-10-28T09:37:24.709874+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "courses/history/2026/10/2026-10-28T093724709874Z_all_time.json",
+      "period": "all_time",
+      "section": "courses",
+      "since": null,
+      "window": "since_inception_with_some_rolling_current_metrics"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.628373+00:00",
+      "generated_at": "2026-10-28T09:37:24.628373+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "users/history/2026/10/2026-10-28T093724628373Z_monthly.json",
+      "period": "monthly",
+      "section": "users",
+      "since": "2026-09-28T09:37:24.628373+00:00",
+      "window": "rolling_30_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.628373+00:00",
+      "generated_at": "2026-10-28T09:37:24.628373+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "sales/history/2026/10/2026-10-28T093724628373Z_monthly.json",
+      "period": "monthly",
+      "section": "sales",
+      "since": "2026-09-28T09:37:24.628373+00:00",
+      "window": "rolling_30_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.628373+00:00",
+      "generated_at": "2026-10-28T09:37:24.628373+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "payments/history/2026/10/2026-10-28T093724628373Z_monthly.json",
+      "period": "monthly",
+      "section": "payments",
+      "since": "2026-09-28T09:37:24.628373+00:00",
+      "window": "rolling_30_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.628373+00:00",
+      "generated_at": "2026-10-28T09:37:24.628373+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "overview/history/2026/10/2026-10-28T093724628373Z_monthly.json",
+      "period": "monthly",
+      "section": "overview",
+      "since": "2026-09-28T09:37:24.628373+00:00",
+      "window": "rolling_30_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.628373+00:00",
+      "generated_at": "2026-10-28T09:37:24.628373+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "courses/history/2026/10/2026-10-28T093724628373Z_monthly.json",
+      "period": "monthly",
+      "section": "courses",
+      "since": "2026-09-28T09:37:24.628373+00:00",
+      "window": "rolling_30_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.562763+00:00",
+      "generated_at": "2026-10-28T09:37:24.562763+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "users/history/2026/10/2026-10-28T093724562763Z_weekly.json",
+      "period": "weekly",
+      "section": "users",
+      "since": "2026-10-21T09:37:24.562763+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.562763+00:00",
+      "generated_at": "2026-10-28T09:37:24.562763+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "sales/history/2026/10/2026-10-28T093724562763Z_weekly.json",
+      "period": "weekly",
+      "section": "sales",
+      "since": "2026-10-21T09:37:24.562763+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.562763+00:00",
+      "generated_at": "2026-10-28T09:37:24.562763+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "payments/history/2026/10/2026-10-28T093724562763Z_weekly.json",
+      "period": "weekly",
+      "section": "payments",
+      "since": "2026-10-21T09:37:24.562763+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.562763+00:00",
+      "generated_at": "2026-10-28T09:37:24.562763+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "overview/history/2026/10/2026-10-28T093724562763Z_weekly.json",
+      "period": "weekly",
+      "section": "overview",
+      "since": "2026-10-21T09:37:24.562763+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-10-29T09:37:24.562763+00:00",
+      "generated_at": "2026-10-28T09:37:24.562763+00:00",
+      "observation_date_utc": "2026-10-28",
+      "path": "courses/history/2026/10/2026-10-28T093724562763Z_weekly.json",
+      "period": "weekly",
+      "section": "courses",
+      "since": "2026-10-21T09:37:24.562763+00:00",
+      "window": "rolling_7_days"
+    },
     {
       "expires_at": "2026-10-28T03:23:25.556495+00:00",
       "generated_at": "2026-10-27T03:23:25.556495+00:00",
