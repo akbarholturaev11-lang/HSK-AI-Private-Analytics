@@ -52,7 +52,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh workflow run sync-r2.yml --ref main
+          gh workflow run sync-r2.yml --repo "$GITHUB_REPOSITORY" --ref main
           echo "R2 mirror workflow queued; check that run for final archive status."
 
       - name: Close successful refresh request issue
