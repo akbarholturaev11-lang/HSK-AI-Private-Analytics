@@ -36,7 +36,7 @@ jobs:
             echo "On-demand refresh is not configured"
             exit 1
           fi
-          # The endpoint refreshes ONLY overall/overview weekly and monthly.
+          # The endpoint refreshes ONLY overall/overview weekly/monthly/all_time.
           # No bearer token, API response or statistics are printed in logs.
           RESPONSE="$(curl --silent --show-error --fail --max-time 90 \
             --request POST \
@@ -44,7 +44,7 @@ jobs:
             --header 'Content-Type: application/json' \
             --data '{}' \
             https://hskai.app/api/internal/admin-pwa/analytics/refresh)"
-          printf '%s' "$RESPONSE" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True and set(d.get("periods", {})) == {"weekly", "monthly"}, "overview refresh not verified"'
+          printf '%s' "$RESPONSE" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True and set(d.get("periods", {})) == {"weekly", "monthly", "all_time"}, "overview refresh not verified"'
           echo "Server overview refresh verified; no data values logged."
 
       - name: Start regular private R2 to GitHub archive sync
