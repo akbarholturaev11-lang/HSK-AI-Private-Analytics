@@ -1,6 +1,6 @@
 # HSK AI — Private Analytics
 
-This **private** repository provides ChatGPT Plus with verified, privacy-filtered
+This **public** repository provides ChatGPT with verified, privacy-filtered
 statistics from HSK AI Admin PWA's Cloudflare R2 aggregate cache.
 
 ## Organized analytics
@@ -48,7 +48,7 @@ while historical observations remain for longitudinal analysis.
 
 ## Reading data from ChatGPT Plus
 
-Give the GitHub connector permission to access this private repo. For example:
+Use the GitHub connector to read this public aggregate repository. For example:
 
 > Open `index.json` in `akbarholturaev11-lang/HSK-AI-Private-Analytics`.
 > For October, open `indexes/2026-10.json` and the relevant category snapshots.
@@ -61,11 +61,15 @@ Give the GitHub connector permission to access this private repo. For example:
 - Pinned, verified overview cache namespace in `.github/workflows/sync-r2.yml`.
 - GitHub Actions runs every six hours UTC, or manually. This **does not** cause
   a new database aggregate to be computed. The Admin PWA R2 cache is demand-driven.
-- Private repository Actions secrets: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
+- Repository Actions secrets: `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
   `R2_SECRET_ACCESS_KEY`.
 - Prefer a **read-only** R2 key scoped to this one bucket. Never commit credentials
   or raw R2 snapshots.
 - Run tests: `python -m unittest discover -s tests -v`.
+
+## Owner-requested manual refresh
+
+The owner can initiate a **forced** server-side recomputation (even before 24h cache expiry) through the GitHub connector after the separately reviewed server endpoint and two matching secret settings have been deployed. See [manual refresh setup](docs/MANUAL_REFRESH_SETUP.md). The normal six-hour schedule continues to only mirror and archive snapshots; it never triggers a database refresh on its own.
 
 ## Limits
 
