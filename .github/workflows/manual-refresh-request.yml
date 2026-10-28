@@ -1,0 +1,65 @@
+name: Owner-only on-demand analytics refresh
+
+on:
+  workflow_dispatch:
+  issues:
+    types: [opened]
+
+# Never check out or evaluate issue content. In a public repository, anyone
+# may open an issue; only the authenticated owner may trigger this privileged job.
+permissions:
+  actions: write
+  contents: read
+  issues: write
+
+jobs:
+  refresh:
+    if: >-
+      github.actor == 'akbarholturaev11-lang' &&
+      (github.event_name == 'workflow_dispatch' ||
+       (github.event_name == 'issues' &&
+        github.event.issue.user.login == 'akbarholturaev11-lang' &&
+        github.event.issue.title == '[HSK AI] Refresh analytics'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    concurrency:
+      group: owner-analytics-on-demand-refresh
+      cancel-in-progress: false
+    steps:
+      - name: Ask HSK AI server to recompute verified aggregates
+        env:
+          REFRESH_TOKEN: ${{ secrets.HSKAI_MANUAL_AGGREGATE_REFRESH_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$REFRESH_TOKEN" ]]; then
+            echo "On-demand refresh is not configured"
+            exit 1
+          fi
+          # The endpoint refreshes ONLY overall/overview weekly/monthly/all_time.
+          # No bearer token, API response or statistics are printed in logs.
+          RESPONSE="$(curl --silent --show-error --fail --max-time 90 \
+            --request POST \
+            --header "Authorization: Bearer $REFRESH_TOKEN" \
+            --header 'Content-Type: application/json' \
+            --data '{}' \
+            https://hskai.app/api/internal/admin-pwa/analytics/refresh)"
+          printf '%s' "$RESPONSE" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True and set(d.get("periods", {})) == {"weekly", "monthly", "all_time"}, "overview refresh not verified"'
+          echo "Server overview refresh verified; no data values logged."
+
+      - name: Start regular private R2 to GitHub archive sync
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run sync-r2.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo "R2 mirror workflow queued; check that run for final archive status."
+
+      - name: Close successful refresh request issue
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+        run: |
+          gh issue close "$ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" \
+            --comment "Source refresh accepted. See the latest Private R2 statistics sync run for GitHub archive status."

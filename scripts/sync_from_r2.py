@@ -242,7 +242,7 @@ def sync(client, bucket, namespace, base, now):
         "generation_times": {p: valid[p]["generated_at"] for p in valid},
         "expires_at": {p: valid[p]["expires_at"] for p in valid},
         "invalid_periods": validation_errors,
-        "note": "R2 cache updates on first-party Admin PWA demand, not on GitHub schedule.",
+        "note": "R2 cache updates on Admin PWA demand or owner-authorized refresh, not GitHub schedule.",
     }
     save_json(out / "status.json", status)
     return status
@@ -353,7 +353,7 @@ def summarize_overview(data):
         f"- Course completed accounts (7d): **{m['course_completed_accounts']}**\n\n"
         "Only aggregate statistics from Admin PWA. Payment records are not unique buyers. "
         "Conversion, revenue and AI usage are not in this dataset. "
-        "Cache refreshes on Admin PWA demand, not on GitHub schedule.\n"
+        "Cache refreshes on Admin PWA demand or owner-authorized request, not GitHub schedule.\n"
     )
 
 
@@ -396,7 +396,7 @@ def sync_overview(client, bucket, namespace, base, now):
         "generation_times": {p: valid[p]["generated_at"] for p in valid},
         "expires_at": {p: valid[p]["expires_at"] for p in valid},
         "invalid_periods": rejected,
-        "note": "24h R2 cache refreshes only on Admin PWA demand, not GitHub schedule.",
+        "note": "24h R2 cache refreshes on Admin PWA demand or owner-authorized request, not GitHub schedule.",
     }
     # Purge old basic-statistics files until that source is explicitly configured.
     for period in PERIODS:
