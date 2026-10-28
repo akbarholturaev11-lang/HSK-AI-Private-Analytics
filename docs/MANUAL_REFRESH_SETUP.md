@@ -26,7 +26,7 @@ successful refresh. Alternatively the owner may click "Run workflow" on
 `.github/workflows/manual-refresh-request.yml`.
 
 The workflow invokes the token-authenticated HSK AI production endpoint. The
-backend **recomputes verified overall/overview weekly and monthly metrics**
+backend **recomputes verified overall/overview weekly, monthly and all-time metrics**
 even while existing 24-hour caches are valid, then writes private R2 with a
 Redis-coordinated lease. The normal `sync-r2.yml` workflow is dispatched after
 successful source refresh to copy only validated aggregate snapshots into the
@@ -53,8 +53,8 @@ current; confirm the subsequent `sync-r2.yml` run is successful, then read
 - Missing Redis distributed coordination or R2: backend fails closed.
 - Failed source recomputation: old snapshot is left intact where possible; no
   fabricated or user-level data is published.
-- If weekly succeeds but monthly fails, the endpoint returns an error and the
-  automatic GitHub mirror dispatch is skipped. The successful weekly source
+- If a prior period succeeds but a later period fails, the endpoint returns an error and the
+  automatic GitHub mirror dispatch is skipped. The successful earlier source
   refresh might already have been committed to private R2 and is not rolled
   back; retry only after inspecting the source error.
 - This does not enable the previously disabled read-only MCP transport. The
