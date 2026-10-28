@@ -40,6 +40,16 @@ current; confirm the subsequent `sync-r2.yml` run is successful, then read
 ## Failure behavior
 
 - Missing/invalid secrets, wrong origin and untrusted issue authors: denied.
+- Two simultaneous requests are serialized by a Redis batch lease. Requests
+  repeated within **60 seconds** of a successful recomputation return HTTP 429;
+  no database read is performed in the rate-limited case.
+- Other Admin PWA workers may still hold the previous in-process overview cache
+  for up to **60 seconds**. Subsequent overview hits revalidate against Redis
+  without triggering a new PostgreSQL query.
+- R2 and Redis are different storage systems and cannot be committed atomically.
+  If R2 succeeds and Redis publication fails, the endpoint reports failure even
+  though the new R2 snapshot exists. Inspect R2/GitHub sync status and retry
+  rather than interpreting every HTTP 503 as "no changes made".
 - Missing Redis distributed coordination or R2: backend fails closed.
 - Failed source recomputation: old snapshot is left intact where possible; no
   fabricated or user-level data is published.
