@@ -21,7 +21,7 @@ class ManualRefreshWorkflowTests(unittest.TestCase):
         self.assertIn("https://hskai.app/api/internal/admin-pwa/analytics/refresh", workflow)
         self.assertIn("--fail --max-time 90", workflow)
         self.assertIn('{"weekly", "monthly", "all_time"}', workflow)
-        self.assertIn("gh workflow run sync-r2.yml --ref main", workflow)
+        self.assertIn('gh workflow run sync-r2.yml --repo "$GITHUB_REPOSITORY" --ref main', workflow)
         self.assertNotIn("pull_request_target", workflow)
         self.assertNotIn("actions/checkout", workflow)
         self.assertNotIn('echo "$REFRESH_TOKEN"', workflow)
