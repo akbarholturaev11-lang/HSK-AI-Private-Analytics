@@ -170,14 +170,11 @@
   "sections": {
     "courses": {
       "historical_snapshots": 3,
-      "latest": "courses/latest.json",
+      "latest": null,
       "most_recent_history": "courses/history/2026/10/2026-10-27T032325556495Z_monthly.json",
       "oldest_history": "courses/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "monthly": "courses/periods/monthly.json",
-        "weekly": "courses/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "marketing": {
       "historical_snapshots": 0,
@@ -189,50 +186,38 @@
     },
     "overview": {
       "historical_snapshots": 3,
-      "latest": "overview/latest.json",
+      "latest": null,
       "most_recent_history": "overview/history/2026/10/2026-10-27T032325556495Z_monthly.json",
       "oldest_history": "overview/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "monthly": "overview/periods/monthly.json",
-        "weekly": "overview/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "payments": {
       "historical_snapshots": 3,
-      "latest": "payments/latest.json",
+      "latest": null,
       "most_recent_history": "payments/history/2026/10/2026-10-27T032325556495Z_monthly.json",
       "oldest_history": "payments/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "monthly": "payments/periods/monthly.json",
-        "weekly": "payments/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "sales": {
       "historical_snapshots": 3,
-      "latest": "sales/latest.json",
+      "latest": null,
       "most_recent_history": "sales/history/2026/10/2026-10-27T032325556495Z_monthly.json",
       "oldest_history": "sales/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "monthly": "sales/periods/monthly.json",
-        "weekly": "sales/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "users": {
       "historical_snapshots": 3,
-      "latest": "users/latest.json",
+      "latest": null,
       "most_recent_history": "users/history/2026/10/2026-10-27T032325556495Z_monthly.json",
       "oldest_history": "users/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "monthly": "users/periods/monthly.json",
-        "weekly": "users/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     }
   },
   "source": "validated Admin PWA overview R2 cache",
-  "status": "fresh",
+  "status": "history_only",
   "total_historical_snapshots": 15
 }
