@@ -1,0 +1,26 @@
+name: Verify independent R2 section bridge (branch only)
+
+on:
+  push:
+    branches:
+      - feat/verified-r2-sections-20261030
+    paths:
+      - .github/workflows/verify-r2-sections.yml
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feat/verified-r2-sections-20261030
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Existing and new bridge tests
+        run: python -m unittest discover -s tests -v
