@@ -43,8 +43,17 @@ jobs:
           R2_BUCKET: hsk-ai-statistics
           R2_OVERVIEW_NAMESPACE: aaa307fc4e280589c3d89a8d
         run: python scripts/sync_from_r2.py
+      - name: Sync independently verified existing R2 analytics sections
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: hsk-ai-statistics
+        run: python -m scripts.section_bridge sync
       - name: Build immutable date-based archives and indexes
         run: python -m scripts.build_archive
+      - name: Archive independent sections and update agent-readable index
+        run: python -m scripts.section_bridge archive
       - name: Commit sanitized files only when changed
         shell: bash
         run: |
@@ -56,6 +65,11 @@ jobs:
             exit 1
           fi
           git add -A -- data/ overview/ users/ sales/ payments/ courses/ indexes/ index.json
+          # The first deployment may have no fresh independent section yet.
+          # Skip nonexistent optional paths without breaking legacy sync.
+          if [[ -d analytics ]] || git ls-files --error-unmatch 'analytics/**' >/dev/null 2>&1; then
+            git add -A -- analytics/
+          fi
           if git diff --cached --quiet; then
             echo 'No new or changed statistics snapshots'
           else
