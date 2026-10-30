@@ -1,0 +1,104 @@
+name: Read-only R2 aggregate inventory (isolated audit)
+
+on:
+  push:
+    branches:
+      - audit/r2-cache-inspection-20261030
+    paths:
+      - .github/workflows/audit-r2-cache-readonly.yml
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: audit/r2-cache-inspection-20261030
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --disable-pip-version-check 'boto3==1.40.70'
+      - name: Read aggregate object keys and type/freshness only (no metrics, identities or raw content in output)
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: hsk-ai-statistics
+        run: |
+          python - <<'PY'
+          import os, re, json
+          from datetime import datetime, timezone
+          from collections import defaultdict
+          import boto3
+          from botocore.config import Config
+
+          account=os.environ.get('R2_ACCOUNT_ID','')
+          access=os.environ.get('R2_ACCESS_KEY_ID','')
+          secret=os.environ.get('R2_SECRET_ACCESS_KEY','')
+          bucket=os.environ.get('R2_BUCKET','')
+          if not re.fullmatch('[0-9a-f]{32}', account) or not access or not secret or not bucket:
+              raise SystemExit('Aggregate read configuration unavailable')
+          client=boto3.client('s3',endpoint_url=f'https://{account}.r2.cloudflarestorage.com',
+             region_name='auto',aws_access_key_id=access,aws_secret_access_key=secret,
+             config=Config(signature_version='s3v4',connect_timeout=5,read_timeout=8,retries={'max_attempts':1}))
+          root='admin-pwa/aggregates/v1/'
+          pattern=re.compile(r'^'+re.escape(root)+r'([0-9a-f]{24})/(statistics|feedback)/([a-z0-9_]+)\.json$')
+          keys=[]
+          for page in client.get_paginator('list_objects_v2').paginate(Bucket=bucket,Prefix=root,PaginationConfig={'PageSize':200}):
+              for item in page.get('Contents',[]):
+                  m=pattern.fullmatch(item.get('Key',''))
+                  if m:keys.append((item['Key'],m.group(2),m.group(3)))
+                  if len(keys)>300:
+                      raise SystemExit('More than 300 matching R2 aggregate objects; bounded audit refused')
+          print(f'INVENTORY_OBJECT_COUNT {len(keys)}')
+          if not keys:
+              print('NO_AGGREGATE_OBJECTS')
+          rows=defaultdict(lambda:{'objects':0,'fresh':0,'expired':0,'invalid':0,'latest':None})
+          now=datetime.now(timezone.utc)
+          for key,kind,variant in keys:
+              label='unclassified'
+              generated=None
+              expiry=None
+              try:
+                  response=client.get_object(Bucket=bucket,Key=key)
+                  if int(response.get('ContentLength',0))>131072:
+                      raise ValueError('oversize')
+                  raw=response['Body'].read(131073)
+                  response['Body'].close()
+                  if len(raw)>131072:raise ValueError('oversize')
+                  doc=json.loads(raw)
+                  data=doc.get('data',{})
+                  if not isinstance(data,dict):raise ValueError('invalid')
+                  scope=data.get('scope') or {}
+                  section=scope.get('section') if isinstance(scope,dict) else None
+                  if kind=='feedback' and data.get('schema')=='hskai_feedback_categories_v1':
+                      label='feedback_categories'
+                  elif kind=='statistics' and data.get('source')=='users + payments + canonical learning events' and section in ('home','overview'):
+                      label=section
+                  elif kind=='statistics' and data.get('source')=='first-party stored aggregate projections' and section in ('course','platform','funnel','money','sources','report','experiments'):
+                      label=section
+                  elif kind=='statistics' and data.get('source')=='AdminMiniAppService + pwa_metrics.overall_activity_metrics':
+                      label='basic_statistics'
+                  else:
+                      label='other_or_legacy'
+                  generated=datetime.fromisoformat(data['generated_at'])
+                  expiry=datetime.fromtimestamp(doc['expires_at'],timezone.utc)
+                  if generated.tzinfo is None or expiry.tzinfo is None:raise ValueError('timezone')
+              except Exception:
+                  label='invalid_or_unclassified'
+              group=(kind,label,variant)
+              x=rows[group];x['objects']+=1
+              if expiry:
+                  x['fresh' if expiry>now else 'expired']+=1
+              else:x['invalid']+=1
+              if generated and (x['latest'] is None or generated>x['latest']):x['latest']=generated
+          for (kind,label,variant),v in sorted(rows.items()):
+              date=v['latest'].strftime('%Y-%m-%dT%H:%MZ') if v['latest'] else 'unknown'
+              print(f'AGGREGATE kind={kind} section={label} variant={variant} present={v["objects"]} fresh={v["fresh"]} expired={v["expired"]} invalid={v["invalid"]} latest_at={date}')
+          print('AUDIT_READ_ONLY_COMPLETE')
+          PY
