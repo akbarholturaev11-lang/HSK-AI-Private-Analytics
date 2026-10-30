@@ -313,8 +313,8 @@ def sync_sections(client, bucket, base, now):
                 file.unlink(missing_ok=True)
     status = {
         "schema_version": 1, "dataset": "hskai_verified_r2_sections",
-        "valid": sorted([{"section": s, "period": p} for s, p in candidates]),
-        "invalid": sorted([{"section": s, "period": p} for s, p in invalid]),
+        "valid": [{"section": s, "period": p} for s, p in sorted(candidates)],
+        "invalid": [{"section": s, "period": p} for s, p in sorted(invalid)],
         "note": "Existing on-demand R2 caches only; no source SQL refresh performed.",
     }
     save_json(base / "data" / "sections" / "status.json", status)
