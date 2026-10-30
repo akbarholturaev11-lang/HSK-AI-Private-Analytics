@@ -1,4 +1,4 @@
-name: Verify independent R2 section bridge (full dry-run)
+name: Verify independent R2 section bridge (final monthly index)
 
 on:
   push:
