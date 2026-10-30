@@ -375,6 +375,41 @@ def archive_sections(base, now):
             "most_recent_history": history[-1].relative_to(base).as_posix() if history else None,
             "source": "independent_r2_section",
         }
+    # Separate monthly navigation for independent sources: legacy monthly
+    # indexes continue to mean overview-sliced data only.
+    from scripts.build_archive import MAX_HISTORY_FILES
+    month_rows = defaultdict(list)
+    seen = 0
+    for section in SECTIONS:
+        folder = base / "analytics" / section / "history"
+        if not folder.exists():
+            continue
+        for file in folder.rglob("*.json"):
+            seen += 1
+            if seen > MAX_HISTORY_FILES:
+                raise InvalidSnapshot("independent history limit exceeded")
+            doc = _read_json(file)
+            rel = file.relative_to(base)
+            if (doc.get("dataset") != "hskai_verified_r2_sections"
+                    or doc.get("section") != section or doc.get("period") not in PERIODS):
+                raise InvalidSnapshot("invalid independent historical source")
+            generated = _dt(doc.get("generated_at"))
+            expected = (base / "analytics" / section / "history" /
+                generated.strftime("%Y") / generated.strftime("%m") /
+                (generated.strftime("%Y-%m-%dT%H%M%S%fZ") + "_" + doc["period"] + ".json"))
+            if file != expected:
+                raise InvalidSnapshot("independent history timestamp mismatch")
+            month_rows[generated.strftime("%Y-%m")].append({
+                "section": section, "path": rel.as_posix(), "period": doc["period"],
+                "since": doc["since"], "generated_at": doc["generated_at"],
+                "expires_at": doc["expires_at"],
+                "observation_date_utc": doc["observation_date_utc"],
+            })
+    for month, rows in month_rows.items():
+        rows.sort(key=lambda row: (row["generated_at"], row["path"]), reverse=True)
+        save_json(base / "indexes" / ("analytics-" + month + ".json"), {
+            "schema_version": 1, "dataset": "hskai_verified_r2_sections_month_index",
+            "month_utc": month, "snapshot_count": len(rows), "snapshots": rows})
     return by_section
 
 
@@ -387,6 +422,17 @@ def attach_index(base, sections):
     if current.get("dataset") != "hskai_private_analytics_index":
         raise InvalidSnapshot("unexpected root index")
     current["independent_analytics"] = sections
+    months = []
+    for file in sorted((base/"indexes").glob("analytics-????-??.json"), reverse=True):
+        from scripts.build_archive import _read_json
+        item = _read_json(file)
+        if item.get("dataset") != "hskai_verified_r2_sections_month_index":
+            raise InvalidSnapshot("invalid independent monthly index")
+        months.append({"month_utc": item["month_utc"],
+                       "index": file.relative_to(base).as_posix(),
+                       "snapshots": item["snapshot_count"]})
+    current["independent_months"] = months
+    current["independent_total_historical_snapshots"] = sum(m["snapshots"] for m in months)
     save_json(path, current)
 
 
