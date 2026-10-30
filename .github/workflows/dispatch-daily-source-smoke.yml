@@ -1,0 +1,22 @@
+name: One-time dispatch of tested owner daily refresh
+on:
+  push:
+    branches:
+      - test/daily-source-refresh-dispatch-20261030
+    paths:
+      - .github/workflows/dispatch-daily-source-smoke.yml
+permissions:
+  actions: write
+  contents: read
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Run the actual main-branch daily owner refresh once
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh workflow run daily-r2-source-refresh.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo 'DAILY_REFRESH_WORKFLOW_DISPATCHED'
