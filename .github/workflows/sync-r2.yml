@@ -64,7 +64,12 @@ jobs:
             echo "Remote main advanced during sync; refusing to replace concurrent changes."
             exit 1
           fi
-          git add -A -- data/ overview/ users/ sales/ payments/ courses/ analytics/ indexes/ index.json
+          git add -A -- data/ overview/ users/ sales/ payments/ courses/ indexes/ index.json
+          # The first deployment may have no fresh independent section yet.
+          # Skip nonexistent optional paths without breaking legacy sync.
+          if [[ -d analytics ]] || git ls-files --error-unmatch 'analytics/**' >/dev/null 2>&1; then
+            git add -A -- analytics/
+          fi
           if git diff --cached --quiet; then
             echo 'No new or changed statistics snapshots'
           else
