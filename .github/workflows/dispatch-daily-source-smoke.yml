@@ -1,4 +1,4 @@
-name: One-time dispatch of tested owner daily refresh
+name: One-time R2 mirror sync after full production refresh
 on:
   push:
     branches:
@@ -13,10 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 2
     steps:
-      - name: Run the actual main-branch daily owner refresh once
+      - name: Publish only validated R2 mirrors after five successful source refreshes
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          gh workflow run daily-r2-source-refresh.yml --repo "$GITHUB_REPOSITORY" --ref main
-          echo 'DAILY_REFRESH_WORKFLOW_DISPATCHED'
+          gh workflow run sync-r2.yml --repo "$GITHUB_REPOSITORY" --ref main
+          echo 'R2_SYNC_AFTER_FULL_REFRESH_DISPATCHED'
