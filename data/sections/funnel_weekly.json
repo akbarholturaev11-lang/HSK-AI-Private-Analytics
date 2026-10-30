@@ -1,8 +1,8 @@
 {
   "available": true,
   "dataset": "hskai_verified_r2_sections",
-  "expires_at": "2026-10-31T10:48:17.711124+00:00",
-  "generated_at": "2026-10-30T10:48:17.711124+00:00",
+  "expires_at": "2026-10-31T10:51:02.443709+00:00",
+  "generated_at": "2026-10-30T10:51:02.443709+00:00",
   "metrics": {
     "attempts": 69,
     "collecting": false,
@@ -37,7 +37,7 @@
   "platform": "overall",
   "schema_version": 1,
   "section": "funnel",
-  "since": "2026-10-23T10:48:17.711124+00:00",
+  "since": "2026-10-23T10:51:02.443709+00:00",
   "source": "first-party stored aggregate projections",
   "window": "rolling_7_days"
 }

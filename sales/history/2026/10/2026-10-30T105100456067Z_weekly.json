@@ -1,0 +1,25 @@
+{
+  "available": true,
+  "dataset": "hskai_admin_overview",
+  "expires_at": "2026-10-31T10:51:00.456067+00:00",
+  "generated_at": "2026-10-30T10:51:00.456067+00:00",
+  "interpretation": {
+    "daily_snapshot": "Observation captured this day; NOT counts for this one day",
+    "measurements": "mixed current-state and selected-period aggregates",
+    "overlapping_windows": "Overlapping 7d/30d snapshots must not be summed",
+    "payments": "record counts and distinct paying accounts are different grains"
+  },
+  "metrics": {
+    "active_pro": 8,
+    "expiring_pro": 0,
+    "paying_accounts": 3
+  },
+  "observation_date_utc": "2026-10-30",
+  "period": "weekly",
+  "platform": "overall",
+  "schema_version": 1,
+  "section": "sales",
+  "since": "2026-10-23T10:51:00.456067+00:00",
+  "source": "HSK AI Admin PWA overview aggregate projection",
+  "window": "rolling_7_days"
+}

@@ -1,0 +1,27 @@
+{
+  "available": true,
+  "dataset": "hskai_verified_r2_sections",
+  "expires_at": "2026-10-31T10:51:03.819801+00:00",
+  "generated_at": "2026-10-30T10:51:03.819801+00:00",
+  "metrics": {
+    "ai_cost_usd_estimate": 0.6961885,
+    "ai_requests": 936,
+    "canonical_payers": 3,
+    "first_payments": 3,
+    "new_paying_accounts": 3,
+    "payments": 3,
+    "renewal_payments": 0,
+    "revenue_is_estimate": true,
+    "revenue_usd_estimate": 15.9483,
+    "tokens": 640221,
+    "unpriced_payments": 0
+  },
+  "observation_date_utc": "2026-10-30",
+  "period": "weekly",
+  "platform": "overall",
+  "schema_version": 1,
+  "section": "money",
+  "since": "2026-10-23T10:51:03.819801+00:00",
+  "source": "first-party stored aggregate projections",
+  "window": "rolling_7_days"
+}
