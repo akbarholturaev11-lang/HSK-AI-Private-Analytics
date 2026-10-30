@@ -9,9 +9,8 @@ from scripts.section_bridge import (
     ROOT, InvalidSnapshot, _sanitize_section, sanitize_section, inventory, sync_sections,
     archive_sections, attach_index,
 )
-from scripts.sync_from_r2 import save_json
+from scripts.sync_from_r2 import save_json, OVERVIEW_PATHS
 from scripts.build_archive import build_archive
-from tests.test_archive import initialize, source as overview_source
 
 NOW = datetime(2026, 10, 30, 9, 30, tzinfo=timezone.utc)
 GEN = NOW - timedelta(minutes=10)
@@ -55,6 +54,32 @@ def feedback_raw(period="weekly"):
                      {"source": "android", "records_scanned": 1, "truncated": False,
                       "categories": [{"category": "reported_issue", "count": 1}]},
                  ]}}).encode()
+
+
+def overview_source(generated=GEN):
+    return {
+        "schema_version": 1,
+        "dataset": "hskai_admin_overview",
+        "platform": "overall",
+        "period": "weekly",
+        "since": (generated-timedelta(days=7)).isoformat(),
+        "generated_at": generated.isoformat(),
+        "expires_at": (generated+timedelta(days=1)).isoformat(),
+        "available": True,
+        "source": "HSK AI Admin PWA overview aggregate projection",
+        "metrics": {name: n+1 for n, name in enumerate(OVERVIEW_PATHS)},
+    }
+
+
+def initialize(base, snapshots):
+    for period, snapshot in snapshots.items():
+        save_json(base/"data"/f"overview_{period}.json",snapshot)
+    save_json(base/"data"/"status.json", {
+        "dataset": "hskai_admin_overview",
+        "source_section": "overview",
+        "status": "fresh",
+        "valid_periods": list(snapshots),
+    })
 
 
 class Body:
