@@ -1,0 +1,49 @@
+name: Daily owner-authenticated R2 aggregate source refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 6 * * *' # Once daily before the 07:17 UTC read-only mirror
+
+permissions:
+  contents: read
+
+concurrency:
+  group: admin-pwa-source-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    # Owner can dispatch manually; scheduled runs are bound to this repository.
+    if: github.event_name == 'schedule' || github.actor == 'akbarholturaev11-lang'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Refresh already implemented approved aggregates only
+        env:
+          REFRESH_TOKEN: ${{ secrets.HSKAI_MANUAL_AGGREGATE_REFRESH_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${REFRESH_TOKEN:-}" ]]; then
+            echo "Owner refresh token is not configured"
+            exit 1
+          fi
+          endpoint='https://hskai.app/api/internal/admin-pwa/analytics/refresh'
+          # The legacy unscoped overview refresh is preserved.
+          response="$(curl --silent --show-error --fail --max-time 90 \
+            --request POST --header "Authorization: Bearer $REFRESH_TOKEN" \
+            --header 'Content-Type: application/json' \
+            --data '{}' "$endpoint")"
+          printf '%s' "$response" | python3 -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True and d.get("section")=="overview" and set(d.get("periods",{}))=={"weekly","monthly","all_time"}'
+          echo 'Overview source refresh verified'
+          # One scoped section/period per request; no private data in output.
+          for section in course funnel money sources; do
+            response="$(curl --silent --show-error --fail --max-time 80 \
+              --request POST --header "Authorization: Bearer $REFRESH_TOKEN" \
+              --header 'Content-Type: application/json' \
+              --data "{\"section\":\"$section\",\"period\":\"weekly\"}" "$endpoint")"
+            printf '%s' "$response" | EXPECTED="$section" python3 -c 'import json,os,sys; d=json.load(sys.stdin); assert d.get("ok") is True and d.get("section")==os.environ["EXPECTED"] and set(d.get("periods",{}))=={"weekly"}'
+            echo "Verified $section weekly refresh (no metrics logged)"
+          done
+          echo 'R2 aggregate refresh complete; separate 6-hour GitHub mirror remains R2 read-only'
