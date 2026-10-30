@@ -388,3 +388,47 @@ def attach_index(base, sections):
         raise InvalidSnapshot("unexpected root index")
     current["independent_analytics"] = sections
     save_json(path, current)
+
+
+
+def main():
+    """GitHub Actions-only entry point: sync reads R2; archive reads local safe JSON."""
+    import os
+    import sys
+    mode = sys.argv[1] if len(sys.argv) == 2 else ""
+    now = datetime.now(timezone.utc)
+    if mode == "archive":
+        sections = archive_sections(Path("."), now)
+        attach_index(Path("."), sections)
+        print("Verified independent analytics archive:", len(sections), "section statuses")
+        return 0
+    if mode != "sync":
+        print("Usage: python -m scripts.section_bridge sync|archive", file=sys.stderr)
+        return 2
+    account = os.environ.get("R2_ACCOUNT_ID", "")
+    bucket = os.environ.get("R2_BUCKET", "")
+    access = os.environ.get("R2_ACCESS_KEY_ID", "")
+    secret = os.environ.get("R2_SECRET_ACCESS_KEY", "")
+    if (not re.fullmatch(r"[0-9a-f]{32}", account) or not access or not secret
+            or not re.fullmatch(r"[a-z0-9][a-z0-9.-]{1,61}[a-z0-9]", bucket)):
+        print("R2 aggregate config unavailable", file=sys.stderr)
+        return 2
+    import boto3
+    from botocore.config import Config
+    client = boto3.client("s3", endpoint_url=f"https://{account}.r2.cloudflarestorage.com",
+        region_name="auto", aws_access_key_id=access, aws_secret_access_key=secret,
+        config=Config(signature_version="s3v4", connect_timeout=5, read_timeout=10,
+                      retries={"max_attempts": 2}))
+    try:
+        status = sync_sections(client, bucket, Path("."), now)
+    except Exception as exc:
+        # No R2 object keys, source content, credentials or network URLs in logs.
+        print("Independent R2 sync failed: " + type(exc).__name__, file=sys.stderr)
+        return 1
+    print("Independent R2 sync:", len(status["valid"]), "fresh section-periods;",
+          len(status["invalid"]), "invalid/expired section-periods")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
