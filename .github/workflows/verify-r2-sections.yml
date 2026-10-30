@@ -1,4 +1,4 @@
-name: Verify independent R2 section bridge (R2 read-only proof)
+name: Verify independent R2 section bridge (full dry-run)
 
 on:
   push:
@@ -49,4 +49,34 @@ jobs:
               print('LIVE_VALID_SECTIONS',[(x['section'],x['period']) for x in status['valid']])
               print('LIVE_INVALID_COUNT',len(status['invalid']))
           print('READ_ONLY_NO_PUBLICATION')
+          PY
+
+      - name: Full R2 to local archive dry-run (no git publication)
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: hsk-ai-statistics
+          R2_OVERVIEW_NAMESPACE: aaa307fc4e280589c3d89a8d
+        run: |
+          set -euo pipefail
+          python scripts/sync_from_r2.py
+          python -m scripts.section_bridge sync
+          python -m scripts.build_archive
+          python -m scripts.section_bridge archive
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          index=json.loads(Path('index.json').read_text())
+          independent=index['independent_analytics']
+          assert all(v['source']=='independent_r2_section' for v in independent.values())
+          assert independent['funnel']['status']=='fresh', 'Live fresh funnel expected for this observation'
+          assert independent['course']['status']=='fresh', 'Live fresh course expected for this observation'
+          assert independent['money']['status']=='fresh', 'Live fresh money expected for this observation'
+          assert independent['sources']['status']=='fresh', 'Live fresh sources expected for this observation'
+          for section in ('funnel','course','money','sources'):
+              doc=json.loads(Path(f'analytics/{section}/latest.json').read_text())
+              assert doc['section']==section and doc['period']=='weekly'
+              assert 'user_id' not in json.dumps(doc) and 'telegram_id' not in json.dumps(doc)
+          print('END_TO_END_DRY_RUN_OK',','.join(sorted(k for k,v in independent.items() if v['status']=='fresh')))
           PY
