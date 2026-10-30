@@ -1,0 +1,44 @@
+name: Owner-authorized daily analytics source refresh
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '35 6 * * *' # Once daily before the existing 07:17 UTC R2-only mirror
+
+permissions:
+  contents: read
+
+concurrency:
+  group: owner-daily-analytics-source-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    # Scheduled jobs run only after this workflow reaches the default branch.
+    if: github.event_name == 'schedule' || github.actor == 'akbarholturaev11-lang'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Refresh four existing weekly projections one at a time
+        env:
+          REFRESH_TOKEN: ${{ secrets.HSKAI_MANUAL_AGGREGATE_REFRESH_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "$REFRESH_TOKEN" ]]; then
+            echo 'Owner refresh not configured'
+            exit 1
+          fi
+          for section in course funnel money sources; do
+            body="{\"section\":\"$section\",\"period\":\"weekly\"}"
+            response="$(curl --silent --show-error --fail --max-time 80 \
+              --request POST \
+              --header "Authorization: Bearer $REFRESH_TOKEN" \
+              --header 'Content-Type: application/json' \
+              --data "$body" \
+              https://hskai.app/api/internal/admin-pwa/analytics/refresh)"
+            printf '%s' "$response" | python -c 'import json,os,sys; d=json.load(sys.stdin); assert d.get("ok") is True and d.get("section")==os.environ["EXPECTED"] and set(d.get("periods",{}))=={"weekly"}' \
+              EXPECTED="$section"
+            echo "Confirmed source refresh for $section; no values logged"
+          done
+          echo 'Source R2 refresh complete; the separately scheduled GitHub mirror remains read-only.'
