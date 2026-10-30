@@ -1,4 +1,4 @@
-name: Verify independent R2 section bridge (branch only)
+name: Verify independent R2 section bridge (R2 read-only proof)
 
 on:
   push:
@@ -24,3 +24,29 @@ jobs:
           python-version: '3.12'
       - name: Existing and new bridge tests
         run: python -m unittest discover -s tests -v
+      - name: Read existing R2 section objects without publishing anything
+        env:
+          R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+          R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          R2_BUCKET: hsk-ai-statistics
+        run: |
+          python -m pip install --disable-pip-version-check 'boto3==1.40.70'
+          python - <<'PY'
+          from tempfile import TemporaryDirectory
+          from pathlib import Path
+          from datetime import datetime, timezone
+          import os, boto3
+          from botocore.config import Config
+          from scripts.section_bridge import sync_sections, _MAX_OBJECTS
+          account=os.environ['R2_ACCOUNT_ID']
+          client=boto3.client('s3',endpoint_url=f'https://{account}.r2.cloudflarestorage.com',
+             region_name='auto',aws_access_key_id=os.environ['R2_ACCESS_KEY_ID'],
+             aws_secret_access_key=os.environ['R2_SECRET_ACCESS_KEY'],
+             config=Config(signature_version='s3v4',connect_timeout=5,read_timeout=10,retries={'max_attempts':1}))
+          with TemporaryDirectory() as folder:
+              status=sync_sections(client,os.environ['R2_BUCKET'],Path(folder),datetime.now(timezone.utc))
+              print('LIVE_VALID_SECTIONS',[(x['section'],x['period']) for x in status['valid']])
+              print('LIVE_INVALID_COUNT',len(status['invalid']))
+          print('READ_ONLY_NO_PUBLICATION')
+          PY
