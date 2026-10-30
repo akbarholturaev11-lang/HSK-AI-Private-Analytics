@@ -214,11 +214,14 @@ def sanitize_section(raw, *, section, period, now, variant):
                 if count > n:
                     raise InvalidSnapshot("invalid feedback category size")
                 counts[row["category"]] += count
-        # Suppress small categories; do not include total count of suppressed
-        # values, so the client cannot subtract and reconstruct them.
-        metrics = {"scanned_records": scanned, "truncated": truncated,
+        # Do not emit an exact sample total: subtracting visible categories
+        # from scanned_records reconstructs the suppressed (<5) remainder,
+        # especially when only one small category is present.
+        metrics = {"truncated": truncated,
                    "categories_at_least_5": {k: v for k, v in sorted(counts.items()) if v >= _MIN_CELL},
-                   "coverage": "latest_500_per_source"}
+                   "coverage": "latest_500_per_source",
+                   "sample_limit_per_source": 500,
+                   "small_category_counts_suppressed": True}
         source = "hskai_feedback_categories_v1"
         out_section = "feedback"
     else:
@@ -276,11 +279,19 @@ def sync_sections(client, bucket, base, now):
     base = Path(base)
     candidates = {}
     invalid = set()
+    malformed_objects = 0
     for key, kind, variant in inventory(client, bucket):
-        raw = fetch(client, bucket, key)
-        if raw is None:
+        try:
+            raw = fetch(client, bucket, key)
+            if raw is None:
+                continue
+            parsed = _parse(raw)
+        except InvalidSnapshot:
+            # Malformed/oversized objects from unrelated cached R2 sections
+            # must NOT take down the existing 16-counter overview mirror.
+            # Network/auth failures remain fatal (no unsafe partial success).
+            malformed_objects += 1
             continue
-        parsed = _parse(raw)
         data = parsed.get("data") if isinstance(parsed, dict) else None
         if not isinstance(data, dict):
             continue
@@ -315,6 +326,7 @@ def sync_sections(client, bucket, base, now):
         "schema_version": 1, "dataset": "hskai_verified_r2_sections",
         "valid": [{"section": s, "period": p} for s, p in sorted(candidates)],
         "invalid": [{"section": s, "period": p} for s, p in sorted(invalid)],
+        "malformed_objects_skipped": malformed_objects,
         "note": "Existing on-demand R2 caches only; no source SQL refresh performed.",
     }
     save_json(base / "data" / "sections" / "status.json", status)

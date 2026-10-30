@@ -139,6 +139,48 @@ class SectionTests(unittest.TestCase):
         self.assertTrue(doc["metrics"]["coverage"].startswith("latest_"))
         self.assertNotIn("low_rating", json.dumps(doc))
 
+    def test_feedback_suppression_is_not_reversible_from_total(self):
+        # Exact scanned total 6 + one published cell 5 would reveal
+        # a sensitive suppressed cell of 1 by subtraction.
+        payload = json.loads(feedback_raw())
+        payload["data"]["sources"] = [
+            {"source": "bot", "records_scanned": 6, "truncated": False,
+             "categories": [{"category": "limits", "count": 5},
+                            {"category": "price", "count": 1}]},
+            {"source": "release", "records_scanned": 0, "truncated": False, "categories": []},
+            {"source": "android", "records_scanned": 0, "truncated": False, "categories": []},
+        ]
+        doc = sanitize_section(json.dumps(payload).encode(), section="feedback",
+                               period="weekly", now=NOW, variant="all_weekly")
+        metrics = doc["metrics"]
+        self.assertEqual(metrics["categories_at_least_5"], {"limits": 5})
+        self.assertNotIn("scanned_records", metrics)
+        self.assertNotIn("total_records", metrics)
+        self.assertTrue(metrics["small_category_counts_suppressed"])
+
+    def test_unrelated_malformed_or_oversized_r2_object_does_not_break_legacy(self):
+        # Matching-key objects can be malformed even when our five intended
+        # analytics sections are sound. Skip and count without leaking keys.
+        objects = {
+            f"{ROOT}/{'a'*24}/statistics/overall_weekly.json": raw_section(),
+            f"{ROOT}/{'c'*24}/statistics/overall_weekly.json": b"not-json",
+            f"{ROOT}/{'d'*24}/statistics/overall_monthly.json": b"x" * (128*1024 + 1),
+        }
+        with TemporaryDirectory() as d:
+            base = Path(d)
+            initialize(base, {"weekly": overview_source(generated=GEN)})
+            status = sync_sections(FakeR2(objects), "bucket", base, NOW)
+            self.assertEqual(status["valid"], [{"section": "funnel", "period": "weekly"}])
+            self.assertEqual(status["malformed_objects_skipped"], 2)
+            # Existing 16-counter legacy build remains usable.
+            build_archive(base, NOW)
+            archive_sections(base, NOW)
+            attach_index(base, archive_sections(base, NOW))
+            index = json.loads((base/"index.json").read_text())
+            self.assertEqual(index["independent_analytics"]["funnel"]["status"], "fresh")
+            self.assertEqual(len(index["sections"]), 6)
+            self.assertNotIn("not-json", (base/"data/sections/status.json").read_text())
+
     def test_invalid_duplicate_json_is_rejected(self):
         with self.assertRaises(InvalidSnapshot):
             sanitize_section(b'{"version":1,"version":1}',section="funnel",period="weekly",
