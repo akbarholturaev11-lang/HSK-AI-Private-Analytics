@@ -1,0 +1,45 @@
+{
+  "dataset": "hskai_verified_r2_sections",
+  "invalid": [
+    {
+      "period": "all_time",
+      "section": "course"
+    },
+    {
+      "period": "weekly",
+      "section": "feedback"
+    },
+    {
+      "period": "all_time",
+      "section": "funnel"
+    },
+    {
+      "period": "all_time",
+      "section": "money"
+    },
+    {
+      "period": "all_time",
+      "section": "sources"
+    }
+  ],
+  "note": "Existing on-demand R2 caches only; no source SQL refresh performed.",
+  "schema_version": 1,
+  "valid": [
+    {
+      "period": "weekly",
+      "section": "course"
+    },
+    {
+      "period": "weekly",
+      "section": "funnel"
+    },
+    {
+      "period": "weekly",
+      "section": "money"
+    },
+    {
+      "period": "weekly",
+      "section": "sources"
+    }
+  ]
+}

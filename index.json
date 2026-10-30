@@ -1,5 +1,63 @@
 {
   "dataset": "hskai_private_analytics_index",
+  "independent_analytics": {
+    "course": {
+      "historical_snapshots": 1,
+      "latest": "analytics/course/latest.json",
+      "most_recent_history": "analytics/course/history/2026/10/2026-10-30T073813464190Z_weekly.json",
+      "periods": {
+        "weekly": "analytics/course/periods/weekly.json"
+      },
+      "source": "independent_r2_section",
+      "status": "fresh"
+    },
+    "feedback": {
+      "historical_snapshots": 0,
+      "latest": null,
+      "most_recent_history": null,
+      "periods": {},
+      "source": "independent_r2_section",
+      "status": "not_cached"
+    },
+    "funnel": {
+      "historical_snapshots": 1,
+      "latest": "analytics/funnel/latest.json",
+      "most_recent_history": "analytics/funnel/history/2026/10/2026-10-30T073918675984Z_weekly.json",
+      "periods": {
+        "weekly": "analytics/funnel/periods/weekly.json"
+      },
+      "source": "independent_r2_section",
+      "status": "fresh"
+    },
+    "money": {
+      "historical_snapshots": 1,
+      "latest": "analytics/money/latest.json",
+      "most_recent_history": "analytics/money/history/2026/10/2026-10-30T074242347780Z_weekly.json",
+      "periods": {
+        "weekly": "analytics/money/periods/weekly.json"
+      },
+      "source": "independent_r2_section",
+      "status": "fresh"
+    },
+    "sources": {
+      "historical_snapshots": 1,
+      "latest": "analytics/sources/latest.json",
+      "most_recent_history": "analytics/sources/history/2026/10/2026-10-30T074244831834Z_weekly.json",
+      "periods": {
+        "weekly": "analytics/sources/periods/weekly.json"
+      },
+      "source": "independent_r2_section",
+      "status": "fresh"
+    }
+  },
+  "independent_months": [
+    {
+      "index": "indexes/analytics-2026-10.json",
+      "month_utc": "2026-10",
+      "snapshots": 4
+    }
+  ],
+  "independent_total_historical_snapshots": 4,
   "months": [
     {
       "index": "indexes/2026-10.json",
