@@ -20,9 +20,9 @@
       "status": "not_cached"
     },
     "funnel": {
-      "historical_snapshots": 1,
+      "historical_snapshots": 2,
       "latest": "analytics/funnel/latest.json",
-      "most_recent_history": "analytics/funnel/history/2026/10/2026-10-30T073918675984Z_weekly.json",
+      "most_recent_history": "analytics/funnel/history/2026/10/2026-10-30T104817711124Z_weekly.json",
       "periods": {
         "weekly": "analytics/funnel/periods/weekly.json"
       },
@@ -54,10 +54,10 @@
     {
       "index": "indexes/analytics-2026-10.json",
       "month_utc": "2026-10",
-      "snapshots": 4
+      "snapshots": 5
     }
   ],
-  "independent_total_historical_snapshots": 4,
+  "independent_total_historical_snapshots": 5,
   "months": [
     {
       "index": "indexes/2026-10.json",
