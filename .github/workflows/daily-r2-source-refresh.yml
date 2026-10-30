@@ -29,6 +29,14 @@ jobs:
             echo 'Owner refresh not configured'
             exit 1
           fi
+          overview="$(curl --silent --show-error --fail --max-time 90 \
+            --request POST \
+            --header "Authorization: Bearer $REFRESH_TOKEN" \
+            --header 'Content-Type: application/json' \
+            --data '{}' \
+            https://hskai.app/api/internal/admin-pwa/analytics/refresh)"
+          printf '%s' "$overview" | python -c 'import json,sys; d=json.load(sys.stdin); assert d.get("ok") is True and d.get("section")=="overview" and set(d.get("periods",{}))=={"weekly","monthly","all_time"}'
+          echo 'Verified legacy overview refresh'
           for section in course funnel money sources; do
             body="{\"section\":\"$section\",\"period\":\"weekly\"}"
             response="$(curl --silent --show-error --fail --max-time 80 \
@@ -37,8 +45,7 @@ jobs:
               --header 'Content-Type: application/json' \
               --data "$body" \
               https://hskai.app/api/internal/admin-pwa/analytics/refresh)"
-            printf '%s' "$response" | python -c 'import json,os,sys; d=json.load(sys.stdin); assert d.get("ok") is True and d.get("section")==os.environ["EXPECTED"] and set(d.get("periods",{}))=={"weekly"}' \
-              EXPECTED="$section"
+            printf '%s' "$response" | EXPECTED="$section" python -c 'import json,os,sys; d=json.load(sys.stdin); assert d.get("ok") is True and d.get("section")==os.environ["EXPECTED"] and set(d.get("periods",{}))=={"weekly"}'
             echo "Confirmed source refresh for $section; no values logged"
           done
           echo 'Source R2 refresh complete; the separately scheduled GitHub mirror remains read-only.'
