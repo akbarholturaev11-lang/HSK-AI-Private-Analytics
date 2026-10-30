@@ -22,6 +22,7 @@
       "section": "sources"
     }
   ],
+  "malformed_objects_skipped": 0,
   "note": "Existing on-demand R2 caches only; no source SQL refresh performed.",
   "schema_version": 1,
   "valid": [
