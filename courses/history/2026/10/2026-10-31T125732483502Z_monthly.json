@@ -1,0 +1,25 @@
+{
+  "available": true,
+  "dataset": "hskai_admin_overview",
+  "expires_at": "2026-11-01T12:57:32.483502+00:00",
+  "generated_at": "2026-10-31T12:57:32.483502+00:00",
+  "interpretation": {
+    "daily_snapshot": "Observation captured this day; NOT counts for this one day",
+    "measurements": "mixed current-state and selected-period aggregates",
+    "overlapping_windows": "Overlapping 7d/30d snapshots must not be summed",
+    "payments": "record counts and distinct paying accounts are different grains"
+  },
+  "metrics": {
+    "course_completed_accounts": 272,
+    "course_engaged_accounts": 352,
+    "course_started_accounts": 303
+  },
+  "observation_date_utc": "2026-10-31",
+  "period": "monthly",
+  "platform": "overall",
+  "schema_version": 1,
+  "section": "courses",
+  "since": "2026-10-01T12:57:32.483502+00:00",
+  "source": "HSK AI Admin PWA overview aggregate projection",
+  "window": "rolling_30_days"
+}

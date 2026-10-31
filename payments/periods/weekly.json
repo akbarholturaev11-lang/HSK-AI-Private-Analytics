@@ -1,8 +1,8 @@
 {
   "available": true,
   "dataset": "hskai_admin_overview",
-  "expires_at": "2026-10-31T10:51:00.456067+00:00",
-  "generated_at": "2026-10-30T10:51:00.456067+00:00",
+  "expires_at": "2026-11-01T12:57:32.406680+00:00",
+  "generated_at": "2026-10-31T12:57:32.406680+00:00",
   "interpretation": {
     "daily_snapshot": "Observation captured this day; NOT counts for this one day",
     "measurements": "mixed current-state and selected-period aggregates",
@@ -15,12 +15,12 @@
     "payments_rejected": 3,
     "pending_current": 1
   },
-  "observation_date_utc": "2026-10-30",
+  "observation_date_utc": "2026-10-31",
   "period": "weekly",
   "platform": "overall",
   "schema_version": 1,
   "section": "payments",
-  "since": "2026-10-23T10:51:00.456067+00:00",
+  "since": "2026-10-24T12:57:32.406680+00:00",
   "source": "HSK AI Admin PWA overview aggregate projection",
   "window": "rolling_7_days"
 }
