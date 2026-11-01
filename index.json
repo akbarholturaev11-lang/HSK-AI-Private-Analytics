@@ -12,12 +12,15 @@
       "status": "fresh"
     },
     "feedback": {
-      "historical_snapshots": 0,
-      "latest": null,
-      "most_recent_history": null,
-      "periods": {},
+      "historical_snapshots": 2,
+      "latest": "analytics/feedback/latest.json",
+      "most_recent_history": "analytics/feedback/history/2026/11/2026-11-01T190333627009Z_monthly.json",
+      "periods": {
+        "monthly": "analytics/feedback/periods/monthly.json",
+        "weekly": "analytics/feedback/periods/weekly.json"
+      },
       "source": "independent_r2_section",
-      "status": "not_cached"
+      "status": "fresh"
     },
     "funnel": {
       "historical_snapshots": 5,
@@ -40,10 +43,12 @@
       "status": "fresh"
     },
     "sources": {
-      "historical_snapshots": 4,
+      "historical_snapshots": 6,
       "latest": "analytics/sources/latest.json",
-      "most_recent_history": "analytics/sources/history/2026/11/2026-11-01T134222423760Z_weekly.json",
+      "most_recent_history": "analytics/sources/history/2026/11/2026-11-01T190406262675Z_all_time.json",
       "periods": {
+        "all_time": "analytics/sources/periods/all_time.json",
+        "monthly": "analytics/sources/periods/monthly.json",
         "weekly": "analytics/sources/periods/weekly.json"
       },
       "source": "independent_r2_section",
@@ -54,7 +59,7 @@
     {
       "index": "indexes/analytics-2026-11.json",
       "month_utc": "2026-11",
-      "snapshots": 4
+      "snapshots": 8
     },
     {
       "index": "indexes/analytics-2026-10.json",
@@ -62,7 +67,7 @@
       "snapshots": 13
     }
   ],
-  "independent_total_historical_snapshots": 17,
+  "independent_total_historical_snapshots": 21,
   "months": [
     {
       "index": "indexes/2026-11.json",
