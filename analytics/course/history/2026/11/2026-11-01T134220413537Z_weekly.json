@@ -1,0 +1,43 @@
+{
+  "available": true,
+  "dataset": "hskai_verified_r2_sections",
+  "expires_at": "2026-11-02T13:42:20.413537+00:00",
+  "generated_at": "2026-11-01T13:42:20.413537+00:00",
+  "metrics": {
+    "activation": {
+      "eligible": 61,
+      "percent": 42.62,
+      "started": 26
+    },
+    "ai_requests": 946,
+    "ai_tokens": 617274,
+    "chat_accounts": 36,
+    "chat_messages": 141,
+    "completed_accounts": 94,
+    "completed_user_lessons": 298,
+    "detail_limited": true,
+    "engaged_accounts": 119,
+    "retention": {
+      "d1": {
+        "eligible": 92,
+        "percent": 3.26,
+        "returned": 3
+      },
+      "d7": {
+        "eligible": 118,
+        "percent": 5.93,
+        "returned": 7
+      }
+    },
+    "sessions": null,
+    "started_accounts": 94
+  },
+  "observation_date_utc": "2026-11-01",
+  "period": "weekly",
+  "platform": "overall",
+  "schema_version": 1,
+  "section": "course",
+  "since": "2026-10-25T13:42:20.413537+00:00",
+  "source": "first-party stored aggregate projections",
+  "window": "rolling_7_days"
+}
