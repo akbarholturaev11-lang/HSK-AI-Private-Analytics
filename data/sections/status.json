@@ -6,12 +6,28 @@
       "section": "course"
     },
     {
+      "period": "monthly",
+      "section": "feedback"
+    },
+    {
+      "period": "weekly",
+      "section": "feedback"
+    },
+    {
       "period": "all_time",
       "section": "funnel"
     },
     {
       "period": "all_time",
       "section": "money"
+    },
+    {
+      "period": "all_time",
+      "section": "sources"
+    },
+    {
+      "period": "monthly",
+      "section": "sources"
     }
   ],
   "malformed_objects_skipped": 0,
@@ -23,28 +39,12 @@
       "section": "course"
     },
     {
-      "period": "monthly",
-      "section": "feedback"
-    },
-    {
-      "period": "weekly",
-      "section": "feedback"
-    },
-    {
       "period": "weekly",
       "section": "funnel"
     },
     {
       "period": "weekly",
       "section": "money"
-    },
-    {
-      "period": "all_time",
-      "section": "sources"
-    },
-    {
-      "period": "monthly",
-      "section": "sources"
     },
     {
       "period": "weekly",

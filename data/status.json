@@ -1,14 +1,14 @@
 {
   "dataset": "hskai_admin_overview",
   "expires_at": {
-    "all_time": "2026-11-02T13:42:19.490155+00:00",
-    "monthly": "2026-11-02T13:42:19.395537+00:00",
-    "weekly": "2026-11-02T13:42:19.322653+00:00"
+    "all_time": "2026-11-03T16:29:15.990811+00:00",
+    "monthly": "2026-11-03T16:29:15.927337+00:00",
+    "weekly": "2026-11-03T16:29:15.887122+00:00"
   },
   "generation_times": {
-    "all_time": "2026-11-01T13:42:19.490155+00:00",
-    "monthly": "2026-11-01T13:42:19.395537+00:00",
-    "weekly": "2026-11-01T13:42:19.322653+00:00"
+    "all_time": "2026-11-02T16:29:15.990811+00:00",
+    "monthly": "2026-11-02T16:29:15.927337+00:00",
+    "weekly": "2026-11-02T16:29:15.887122+00:00"
   },
   "invalid_periods": [],
   "note": "24h R2 cache refreshes on Admin PWA demand or owner-authorized request, not GitHub schedule.",

@@ -1,0 +1,43 @@
+{
+  "available": true,
+  "dataset": "hskai_verified_r2_sections",
+  "expires_at": "2026-11-03T16:29:18.459719+00:00",
+  "generated_at": "2026-11-02T16:29:18.459719+00:00",
+  "metrics": {
+    "attempts": 51,
+    "collecting": false,
+    "conversion_percent": 1.49,
+    "converted_accounts": 1,
+    "registered_accounts": 67,
+    "steps": [
+      {
+        "accounts": 32,
+        "key": "checkout_opened"
+      },
+      {
+        "accounts": 11,
+        "key": "payment_instructions_viewed"
+      },
+      {
+        "accounts": 1,
+        "key": "payment_receipt_selected"
+      },
+      {
+        "accounts": 1,
+        "key": "payment_screenshot_submitted"
+      },
+      {
+        "accounts": 1,
+        "key": "payment_approved"
+      }
+    ]
+  },
+  "observation_date_utc": "2026-11-02",
+  "period": "weekly",
+  "platform": "overall",
+  "schema_version": 1,
+  "section": "funnel",
+  "since": "2026-10-26T16:29:18.459719+00:00",
+  "source": "first-party stored aggregate projections",
+  "window": "rolling_7_days"
+}
