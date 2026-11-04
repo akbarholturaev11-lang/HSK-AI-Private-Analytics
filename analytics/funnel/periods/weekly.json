@@ -1,14 +1,14 @@
 {
   "available": true,
   "dataset": "hskai_verified_r2_sections",
-  "expires_at": "2026-11-04T14:33:56.196938+00:00",
-  "generated_at": "2026-11-03T14:33:56.196938+00:00",
+  "expires_at": "2026-11-05T14:48:44.764748+00:00",
+  "generated_at": "2026-11-04T14:48:44.764748+00:00",
   "metrics": {
-    "attempts": 48,
+    "attempts": 51,
     "collecting": false,
-    "conversion_percent": 1.61,
-    "converted_accounts": 1,
-    "registered_accounts": 62,
+    "conversion_percent": 0.0,
+    "converted_accounts": 0,
+    "registered_accounts": 55,
     "steps": [
       {
         "accounts": 33,
@@ -32,12 +32,12 @@
       }
     ]
   },
-  "observation_date_utc": "2026-11-03",
+  "observation_date_utc": "2026-11-04",
   "period": "weekly",
   "platform": "overall",
   "schema_version": 1,
   "section": "funnel",
-  "since": "2026-10-27T14:33:56.196938+00:00",
+  "since": "2026-10-28T14:48:44.764748+00:00",
   "source": "first-party stored aggregate projections",
   "window": "rolling_7_days"
 }
