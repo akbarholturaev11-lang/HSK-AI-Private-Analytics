@@ -1,25 +1,25 @@
 {
   "available": true,
   "dataset": "hskai_admin_overview",
-  "expires_at": "2026-11-05T14:48:41.997274+00:00",
-  "generated_at": "2026-11-04T14:48:41.997274+00:00",
+  "expires_at": "2026-11-06T14:52:39.793947+00:00",
+  "generated_at": "2026-11-05T14:52:39.793947+00:00",
   "metrics": {
-    "active_accounts": 673,
-    "active_pro": 9,
-    "active_today": 30,
+    "active_accounts": 661,
+    "active_pro": 8,
+    "active_today": 38,
     "blocked_current": 2,
-    "bot_blocked": 147,
-    "course_completed_accounts": 262,
-    "course_engaged_accounts": 341,
-    "course_started_accounts": 291,
-    "expiring_pro": 1,
-    "new_accounts": 535,
+    "bot_blocked": 141,
+    "course_completed_accounts": 256,
+    "course_engaged_accounts": 334,
+    "course_started_accounts": 285,
+    "expiring_pro": 0,
+    "new_accounts": 521,
     "paying_accounts": 11,
     "payments_approved": 12,
     "payments_pending": 1,
-    "payments_rejected": 8,
+    "payments_rejected": 10,
     "pending_current": 1,
-    "users_total": 2359
+    "users_total": 2361
   },
   "period": "monthly",
   "platform": "overall",
@@ -32,7 +32,7 @@
     "payments": "records by current status in selected period, not distinct payers",
     "section": "overview"
   },
-  "since": "2026-10-05T14:48:41.997274+00:00",
+  "since": "2026-10-06T14:52:39.793947+00:00",
   "source": "HSK AI Admin PWA overview aggregate projection",
   "timezone": "UTC"
 }
