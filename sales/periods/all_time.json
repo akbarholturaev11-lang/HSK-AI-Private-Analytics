@@ -1,8 +1,8 @@
 {
   "available": true,
   "dataset": "hskai_admin_overview",
-  "expires_at": "2026-11-06T14:52:39.877006+00:00",
-  "generated_at": "2026-11-05T14:52:39.877006+00:00",
+  "expires_at": "2026-11-07T14:31:06.222307+00:00",
+  "generated_at": "2026-11-06T14:31:06.222307+00:00",
   "interpretation": {
     "daily_snapshot": "Observation captured this day; NOT counts for this one day",
     "measurements": "mixed current-state and selected-period aggregates",
@@ -14,7 +14,7 @@
     "expiring_pro": 0,
     "paying_accounts": 20
   },
-  "observation_date_utc": "2026-11-05",
+  "observation_date_utc": "2026-11-06",
   "period": "all_time",
   "platform": "overall",
   "schema_version": 1,
