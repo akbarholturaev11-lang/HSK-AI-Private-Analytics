@@ -2,8 +2,53 @@
   "dataset": "hskai_verified_r2_sections_month_index",
   "month_utc": "2026-11",
   "schema_version": 1,
-  "snapshot_count": 32,
+  "snapshot_count": 37,
   "snapshots": [
+    {
+      "expires_at": "2026-11-09T13:46:17.391352+00:00",
+      "generated_at": "2026-11-08T13:46:17.391352+00:00",
+      "observation_date_utc": "2026-11-08",
+      "path": "analytics/sources/history/2026/11/2026-11-08T134617391352Z_weekly.json",
+      "period": "weekly",
+      "section": "sources",
+      "since": "2026-11-01T13:46:17.391352+00:00"
+    },
+    {
+      "expires_at": "2026-11-09T13:46:16.606548+00:00",
+      "generated_at": "2026-11-08T13:46:16.606548+00:00",
+      "observation_date_utc": "2026-11-08",
+      "path": "analytics/money/history/2026/11/2026-11-08T134616606548Z_weekly.json",
+      "period": "weekly",
+      "section": "money",
+      "since": "2026-11-01T13:46:16.606548+00:00"
+    },
+    {
+      "expires_at": "2026-11-09T13:46:15.993410+00:00",
+      "generated_at": "2026-11-08T13:46:15.993410+00:00",
+      "observation_date_utc": "2026-11-08",
+      "path": "analytics/funnel/history/2026/11/2026-11-08T134615993410Z_weekly.json",
+      "period": "weekly",
+      "section": "funnel",
+      "since": "2026-11-01T13:46:15.993410+00:00"
+    },
+    {
+      "expires_at": "2026-11-09T13:46:14.250610+00:00",
+      "generated_at": "2026-11-08T13:46:14.250610+00:00",
+      "observation_date_utc": "2026-11-08",
+      "path": "analytics/course/history/2026/11/2026-11-08T134614250610Z_weekly.json",
+      "period": "weekly",
+      "section": "course",
+      "since": "2026-11-01T13:46:14.250610+00:00"
+    },
+    {
+      "expires_at": "2026-11-09T10:29:22.876658+00:00",
+      "generated_at": "2026-11-08T10:29:22.876658+00:00",
+      "observation_date_utc": "2026-11-08",
+      "path": "analytics/feedback/history/2026/11/2026-11-08T102922876658Z_weekly.json",
+      "period": "weekly",
+      "section": "feedback",
+      "since": "2026-11-01T10:29:22.876658+00:00"
+    },
     {
       "expires_at": "2026-11-08T13:27:41.827649+00:00",
       "generated_at": "2026-11-07T13:27:41.827649+00:00",
