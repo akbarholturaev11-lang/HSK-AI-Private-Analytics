@@ -2,8 +2,44 @@
   "dataset": "hskai_verified_r2_sections_month_index",
   "month_utc": "2026-11",
   "schema_version": 1,
-  "snapshot_count": 37,
+  "snapshot_count": 41,
   "snapshots": [
+    {
+      "expires_at": "2026-11-10T16:45:38.798331+00:00",
+      "generated_at": "2026-11-09T16:45:38.798331+00:00",
+      "observation_date_utc": "2026-11-09",
+      "path": "analytics/sources/history/2026/11/2026-11-09T164538798331Z_weekly.json",
+      "period": "weekly",
+      "section": "sources",
+      "since": "2026-11-02T16:45:38.798331+00:00"
+    },
+    {
+      "expires_at": "2026-11-10T16:45:37.647241+00:00",
+      "generated_at": "2026-11-09T16:45:37.647241+00:00",
+      "observation_date_utc": "2026-11-09",
+      "path": "analytics/money/history/2026/11/2026-11-09T164537647241Z_weekly.json",
+      "period": "weekly",
+      "section": "money",
+      "since": "2026-11-02T16:45:37.647241+00:00"
+    },
+    {
+      "expires_at": "2026-11-10T16:45:36.957397+00:00",
+      "generated_at": "2026-11-09T16:45:36.957397+00:00",
+      "observation_date_utc": "2026-11-09",
+      "path": "analytics/funnel/history/2026/11/2026-11-09T164536957397Z_weekly.json",
+      "period": "weekly",
+      "section": "funnel",
+      "since": "2026-11-02T16:45:36.957397+00:00"
+    },
+    {
+      "expires_at": "2026-11-10T16:45:35.653860+00:00",
+      "generated_at": "2026-11-09T16:45:35.653860+00:00",
+      "observation_date_utc": "2026-11-09",
+      "path": "analytics/course/history/2026/11/2026-11-09T164535653860Z_weekly.json",
+      "period": "weekly",
+      "section": "course",
+      "since": "2026-11-02T16:45:35.653860+00:00"
+    },
     {
       "expires_at": "2026-11-09T13:46:17.391352+00:00",
       "generated_at": "2026-11-08T13:46:17.391352+00:00",

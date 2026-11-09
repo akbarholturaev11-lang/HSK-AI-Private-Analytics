@@ -1,8 +1,8 @@
 {
   "available": true,
   "dataset": "hskai_admin_overview",
-  "expires_at": "2026-11-09T13:46:12.969820+00:00",
-  "generated_at": "2026-11-08T13:46:12.969820+00:00",
+  "expires_at": "2026-11-10T16:45:34.009521+00:00",
+  "generated_at": "2026-11-09T16:45:34.009521+00:00",
   "interpretation": {
     "daily_snapshot": "Observation captured this day; NOT counts for this one day",
     "measurements": "mixed current-state and selected-period aggregates",
@@ -10,11 +10,11 @@
     "payments": "record counts and distinct paying accounts are different grains"
   },
   "metrics": {
-    "course_completed_accounts": 503,
-    "course_engaged_accounts": 768,
-    "course_started_accounts": 717
+    "course_completed_accounts": 509,
+    "course_engaged_accounts": 777,
+    "course_started_accounts": 726
   },
-  "observation_date_utc": "2026-11-08",
+  "observation_date_utc": "2026-11-09",
   "period": "all_time",
   "platform": "overall",
   "schema_version": 1,
