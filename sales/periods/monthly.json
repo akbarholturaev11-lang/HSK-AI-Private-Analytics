@@ -1,8 +1,8 @@
 {
   "available": true,
   "dataset": "hskai_admin_overview",
-  "expires_at": "2026-11-10T16:45:33.934838+00:00",
-  "generated_at": "2026-11-09T16:45:33.934838+00:00",
+  "expires_at": "2026-11-11T15:09:22.224617+00:00",
+  "generated_at": "2026-11-10T15:09:22.224617+00:00",
   "interpretation": {
     "daily_snapshot": "Observation captured this day; NOT counts for this one day",
     "measurements": "mixed current-state and selected-period aggregates",
@@ -12,14 +12,14 @@
   "metrics": {
     "active_pro": 7,
     "expiring_pro": 0,
-    "paying_accounts": 10
+    "paying_accounts": 7
   },
-  "observation_date_utc": "2026-11-09",
+  "observation_date_utc": "2026-11-10",
   "period": "monthly",
   "platform": "overall",
   "schema_version": 1,
   "section": "sales",
-  "since": "2026-10-10T16:45:33.934838+00:00",
+  "since": "2026-10-11T15:09:22.224617+00:00",
   "source": "HSK AI Admin PWA overview aggregate projection",
   "window": "rolling_30_days"
 }
