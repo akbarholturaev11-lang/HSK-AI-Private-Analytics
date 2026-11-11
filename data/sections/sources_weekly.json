@@ -1,21 +1,21 @@
 {
   "available": true,
   "dataset": "hskai_verified_r2_sections",
-  "expires_at": "2026-11-11T15:09:27.814510+00:00",
-  "generated_at": "2026-11-10T15:09:27.814510+00:00",
+  "expires_at": "2026-11-12T14:39:26.783422+00:00",
+  "generated_at": "2026-11-11T14:39:26.783422+00:00",
   "metrics": {
-    "anonymous_tagged_site_visits": 64,
+    "anonymous_tagged_site_visits": 82,
     "anonymous_traffic_not_accounts": true,
-    "approved_payment_records_with_recorded_or_unknown_source": 1,
+    "approved_payment_records_with_recorded_or_unknown_source": 4,
     "attribution": "descriptive_only_no_causal_claim",
-    "subscription_entry_events": 67
+    "subscription_entry_events": 83
   },
-  "observation_date_utc": "2026-11-10",
+  "observation_date_utc": "2026-11-11",
   "period": "weekly",
   "platform": "overall",
   "schema_version": 1,
   "section": "sources",
-  "since": "2026-11-03T15:09:27.814510+00:00",
+  "since": "2026-11-04T14:39:26.783422+00:00",
   "source": "first-party stored aggregate projections",
   "window": "rolling_7_days"
 }

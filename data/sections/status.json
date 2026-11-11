@@ -10,10 +10,6 @@
       "section": "feedback"
     },
     {
-      "period": "weekly",
-      "section": "feedback"
-    },
-    {
       "period": "all_time",
       "section": "funnel"
     },
@@ -37,6 +33,10 @@
     {
       "period": "weekly",
       "section": "course"
+    },
+    {
+      "period": "weekly",
+      "section": "feedback"
     },
     {
       "period": "weekly",
