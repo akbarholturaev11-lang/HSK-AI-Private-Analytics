@@ -2,8 +2,58 @@
   "dataset": "hskai_private_analytics_month_index",
   "month_utc": "2026-11",
   "schema_version": 1,
-  "snapshot_count": 165,
+  "snapshot_count": 170,
   "snapshots": [
+    {
+      "expires_at": "2026-11-13T14:49:38.467926+00:00",
+      "generated_at": "2026-11-12T14:49:38.467926+00:00",
+      "observation_date_utc": "2026-11-12",
+      "path": "users/history/2026/11/2026-11-12T144938467926Z_weekly.json",
+      "period": "weekly",
+      "section": "users",
+      "since": "2026-11-05T14:49:38.467926+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-11-13T14:49:38.467926+00:00",
+      "generated_at": "2026-11-12T14:49:38.467926+00:00",
+      "observation_date_utc": "2026-11-12",
+      "path": "sales/history/2026/11/2026-11-12T144938467926Z_weekly.json",
+      "period": "weekly",
+      "section": "sales",
+      "since": "2026-11-05T14:49:38.467926+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-11-13T14:49:38.467926+00:00",
+      "generated_at": "2026-11-12T14:49:38.467926+00:00",
+      "observation_date_utc": "2026-11-12",
+      "path": "payments/history/2026/11/2026-11-12T144938467926Z_weekly.json",
+      "period": "weekly",
+      "section": "payments",
+      "since": "2026-11-05T14:49:38.467926+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-11-13T14:49:38.467926+00:00",
+      "generated_at": "2026-11-12T14:49:38.467926+00:00",
+      "observation_date_utc": "2026-11-12",
+      "path": "overview/history/2026/11/2026-11-12T144938467926Z_weekly.json",
+      "period": "weekly",
+      "section": "overview",
+      "since": "2026-11-05T14:49:38.467926+00:00",
+      "window": "rolling_7_days"
+    },
+    {
+      "expires_at": "2026-11-13T14:49:38.467926+00:00",
+      "generated_at": "2026-11-12T14:49:38.467926+00:00",
+      "observation_date_utc": "2026-11-12",
+      "path": "courses/history/2026/11/2026-11-12T144938467926Z_weekly.json",
+      "period": "weekly",
+      "section": "courses",
+      "since": "2026-11-05T14:49:38.467926+00:00",
+      "window": "rolling_7_days"
+    },
     {
       "expires_at": "2026-11-12T14:39:22.662040+00:00",
       "generated_at": "2026-11-11T14:39:22.662040+00:00",

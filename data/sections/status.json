@@ -6,7 +6,15 @@
       "section": "course"
     },
     {
+      "period": "weekly",
+      "section": "course"
+    },
+    {
       "period": "monthly",
+      "section": "feedback"
+    },
+    {
+      "period": "weekly",
       "section": "feedback"
     },
     {
@@ -14,7 +22,15 @@
       "section": "funnel"
     },
     {
+      "period": "weekly",
+      "section": "funnel"
+    },
+    {
       "period": "all_time",
+      "section": "money"
+    },
+    {
+      "period": "weekly",
       "section": "money"
     },
     {
@@ -23,32 +39,15 @@
     },
     {
       "period": "monthly",
+      "section": "sources"
+    },
+    {
+      "period": "weekly",
       "section": "sources"
     }
   ],
   "malformed_objects_skipped": 0,
   "note": "Existing on-demand R2 caches only; no source SQL refresh performed.",
   "schema_version": 1,
-  "valid": [
-    {
-      "period": "weekly",
-      "section": "course"
-    },
-    {
-      "period": "weekly",
-      "section": "feedback"
-    },
-    {
-      "period": "weekly",
-      "section": "funnel"
-    },
-    {
-      "period": "weekly",
-      "section": "money"
-    },
-    {
-      "period": "weekly",
-      "section": "sources"
-    }
-  ]
+  "valid": []
 }

@@ -1,23 +1,20 @@
 {
   "dataset": "hskai_admin_overview",
   "expires_at": {
-    "all_time": "2026-11-12T14:39:22.662040+00:00",
-    "monthly": "2026-11-12T14:39:22.531945+00:00",
-    "weekly": "2026-11-12T14:39:22.474073+00:00"
+    "weekly": "2026-11-13T14:49:38.467926+00:00"
   },
   "generation_times": {
-    "all_time": "2026-11-11T14:39:22.662040+00:00",
-    "monthly": "2026-11-11T14:39:22.531945+00:00",
-    "weekly": "2026-11-11T14:39:22.474073+00:00"
+    "weekly": "2026-11-12T14:49:38.467926+00:00"
   },
-  "invalid_periods": [],
+  "invalid_periods": [
+    "monthly",
+    "all_time"
+  ],
   "note": "24h R2 cache refreshes on Admin PWA demand or owner-authorized request, not GitHub schedule.",
   "schema_version": 1,
   "source_section": "overview",
   "status": "fresh",
   "valid_periods": [
-    "all_time",
-    "monthly",
     "weekly"
   ]
 }
