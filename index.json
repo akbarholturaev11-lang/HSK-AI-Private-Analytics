@@ -380,13 +380,11 @@
   "sections": {
     "courses": {
       "historical_snapshots": 52,
-      "latest": "courses/latest.json",
+      "latest": null,
       "most_recent_history": "courses/history/2026/11/2026-11-12T144938467926Z_weekly.json",
       "oldest_history": "courses/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "weekly": "courses/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "marketing": {
       "historical_snapshots": 0,
@@ -398,46 +396,38 @@
     },
     "overview": {
       "historical_snapshots": 52,
-      "latest": "overview/latest.json",
+      "latest": null,
       "most_recent_history": "overview/history/2026/11/2026-11-12T144938467926Z_weekly.json",
       "oldest_history": "overview/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "weekly": "overview/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "payments": {
       "historical_snapshots": 52,
-      "latest": "payments/latest.json",
+      "latest": null,
       "most_recent_history": "payments/history/2026/11/2026-11-12T144938467926Z_weekly.json",
       "oldest_history": "payments/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "weekly": "payments/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "sales": {
       "historical_snapshots": 52,
-      "latest": "sales/latest.json",
+      "latest": null,
       "most_recent_history": "sales/history/2026/11/2026-11-12T144938467926Z_weekly.json",
       "oldest_history": "sales/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "weekly": "sales/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     },
     "users": {
       "historical_snapshots": 52,
-      "latest": "users/latest.json",
+      "latest": null,
       "most_recent_history": "users/history/2026/11/2026-11-12T144938467926Z_weekly.json",
       "oldest_history": "users/history/2026/10/2026-10-26T010159760210Z_weekly.json",
-      "periods": {
-        "weekly": "users/periods/weekly.json"
-      },
-      "status": "fresh"
+      "periods": {},
+      "status": "history_only"
     }
   },
   "source": "validated Admin PWA overview R2 cache",
-  "status": "fresh",
+  "status": "history_only",
   "total_historical_snapshots": 260
 }
